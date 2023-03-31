@@ -516,7 +516,7 @@ def placeorder():
                     <b>Your Order Number is: %s</b>
                     <p>We're getting your order ready to be shipped.We will notify you when it has<br> been sent.</p>
                     <p>Login to see your order</p>
-                    <a href="http://rewards.centralindia.cloudapp.azure.com:5000/"
+                    <a href="https://erewardsportal.azurewebsites.net/"
                         style="height:200px; background-color:blue; color:white; text-decoration:none; padding:8px; margin-bottom:10px; border: 1px solid  black;">
                         Login</a>
                     <br>
@@ -1269,7 +1269,7 @@ def new_emp():
           Congratulations your email has been successfully added now you can complete the verification and activate the account through eGiftPortal link is given below
          </h5>
          
-         <a href="http://rewards.centralindia.cloudapp.azure.com:5000/" style="height:200px; background-color:blue; color:white; text-decoration:none; padding:10px; margin-bottom:10px;"> Activate your account</a>
+         <a href="https://erewardsportal.azurewebsites.net/" style="height:200px; background-color:blue; color:white; text-decoration:none; padding:10px; margin-bottom:10px;"> Activate your account</a>
          <br>
          <br>
          <hr>
