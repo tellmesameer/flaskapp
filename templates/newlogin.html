@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Page</title>
+
+ 
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="/static/css/login.css">
+</head>
+
+<body style="background:  #0e223d;">
+  <p class="ab text-light text-center">
+
+    <span>
+    E Gift Portal
+    </span>
+  
+  </p>
+  <div class="login-box bg-primary-subtle" id="new">
+    <p class="text-dark">Login</p>
+    {%with messages = get_flashed_messages()%}
+    {%if messages%}
+    {% for message in messages %}
+    <div class="alert
+    {%if mrd==1%} 
+    alert-success
+    {%else%}
+    alert-danger
+    {%endif%}
+     alert-dismissible fade show" role="alert">
+      <strong>{{message}} </strong> 
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {%endfor%}
+    {%endif%}
+    {%endwith%}
+    <form method="post" action="{{url_for('goe')}}">
+      <div class="user-box  ">
+        <input required="" name="email" type="text">
+        <label class="text-dark">Email</label>
+      </div>
+      <a>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <button type="submit" id="submit">Sign In</button>
+      </a>
+    </form>
+    <p style="display: none;"> <a href="" class="a2 text-primary">Forgot Password</a></p>
+  </div>
+
+
+
+
+  <div class="login-box bg-primary-subtle" id="ver" style="display: none;">
+    <p class="text-dark">Login</p>
+    <form  method="post" action="{{url_for('verification')}}" >
+      {%if (otpw)%}
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        OTP Is Sent Successfully To Your Registered Email
+         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {%endif%}
+      <div class="user-box" >
+        <input  name="emailes" type="text" id="email_val" >
+        <label class="text-dark">Email</label>
+      </div>
+      <div class="user-box" >
+        <input name="pwds" id="pwds" type="password">
+        <label class="text-dark" id="pwd" style="display: none;">Password</label>
+        <label class="text-dark" id="otp" style="display: none;">OTP</label>
+      </div>
+      <a >
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+    
+        <button type="submit" id="submit">Submit</button>
+      </form>
+      </a>
+    
+    
+      
+ 
+      <button type="button" class="btn btn-primary text-primary border-0" data-bs-toggle="modal" data-bs-target="#forgotpass"style="background-color:transparent;">
+        Forgot Password
+      </button>     
+ 
+  </div>
+
+  <!--forgot password Modal -->
+
+
+<div class="modal fade" id="forgotpass" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Forgot Password</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{url_for('forgot_pwd')}}" method="post">
+      <div class="modal-body">
+        {%if ld==0 %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          User Email Not Found
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+             {%endif%}
+        <div class="form-floating mb-3">
+          <input type="email" name="email" class="form-control" id="floatingInput" placeholder="name@example.com" required>
+          <label for="floatingInput">Email address</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary "  >
+           Send Otp
+        </button>  
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+<!-- end forgot -->
+
+<!-- verify otp -->
+<div class="modal fade" id="sendotp" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Forgot Password</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{url_for('veri')}}" method="post">
+      <div class="modal-body">
+          {%if ld==1 %}
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            OTP Is Sent Successfully To Your Registered Email ID
+             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+          {%endif%}
+        <div class="form-floating mb-3">
+          <input type="password" name="otp" class="form-control" id="floatingInput"  required>
+          <label for="floatingInput">OTP</label>
+        </div>
+   
+      
+
+       
+      </div>
+      <div class="modal-footer">
+        
+        <button type="submit" class="btn btn-primary "  >
+           Verify Otp
+        </button>  
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+<!-- end verify -->
+<!-- confirm pass -->
+<div class="modal fade" id="cnfpwd" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Forgot Password</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{url_for('setpwd')}}" method="post">
+      <div class="modal-body">
+
+        <div class="form-floating mb-3">
+          <input type="password" name="pwd" class="form-control" id="pin" required>
+          <label for="floatingInput">Password</label>
+        </div>
+        <div class="form-floating mb-3">
+          <input type="password" name="cpwds" class="form-control" id="cfm_pin" onkeyup="Confirm_PIN()" required>
+          <label for="floatingInput">Confirm Password</label>
+          <span id="pin_correct" class="text-danger"></span>
+
+        </div>
+      
+
+       
+      </div>
+      <div class="modal-footer">
+   
+        <button type="submit" class="btn btn-primary "id="update_pin" data-bs-toggle="modal" disabled>
+          Change password
+        </button>  
+     
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+<!-- end confirm pass -->
+<!-- Succesffully password changed -->
+<div class="modal fade" id="success" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action="{{url_for('back')}}" method="post">
+      <div class="modal-body">
+
+     <h5>Congrtaulations your password has successfully Changed</h5>
+      
+
+       
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary " data-bs-toggle="modal" >
+          Back to login
+        </button>  
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+<!-- end sucess password -->
+<!-- otp verify failed  -->
+<div class="modal fade" id="otpfailed" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <form action="{{url_for('back')}}" method="post">
+      <div class="modal-body">
+
+     <h5>Verification Failed Due To OTP Mismatch</h5>
+      
+
+       
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary " data-bs-toggle="modal" >
+          Back to login
+        </button>  
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<!-- end otp verify  -->
+ <!-- Verification modal -->
+  <div class="modal fad" id="exampleModalToggle" data-bs-backdrop="static" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content bg-primary-subtle">
+        <div class="modal-header">
+          {%if (comp)%}
+            <h4 class="text-success">Verification Successful</h4>
+           {%endif%}
+        </div>
+        <div class="modal-body">
+            <h4 class="text-danger" id="otp_failed" style="display:none;">
+                Verification Failed due to {{mssg}} Mismatch
+            </h4>
+            <div  id="otp_success" style="display:none;"> 
+              {%if (comp)%}
+            <h5 class="modal-title" id="exampleModalLongTitle">Please Enter Your Details:</h5>
+             {%else%}
+             <h4 class="text-success">Verification Successful</h4>
+              {%endif%}
+                {%if(comp)%}
+                <br>
+                  <form action="{{url_for('pwds')}}" method="post"> 
+                    <div class="form-floating mb-3"> 
+                      <input type="text" name="full_name" class="form-control" required> 
+                      <label for="floatingInput">Full Name</label> 
+                    </div> 
+                    <div class="form-floating mb-3"> 
+                      <input type="text" name="phno"  pattern="[6789][0-9]{9}" class="form-control" title="Please enter valid phone number" minlength="10" maxlength="10" onkeyup="val(this)" required> 
+                      <label for="floatingInput">Phone no</label>
+                      <span id="res" class="text-danger"></span> 
+                    </div> 
+                    <div class="form-floating mb-3"> 
+                      <input type="password" name="password" class="form-control" id="pins" required> 
+                      <label for="floatingInput">Password</label> 
+                    </div> 
+                    <div class="form-floating mb-3"> 
+                      <input type="password" name="confirm_password" class="form-control" id="cfm_pins" 
+                        onkeyup="Confirm_PINs()" required> 
+                      <label for="floatingInput">Confirm Password</label> 
+                      <span id="pin_corrects" class="text-danger"></span> 
+       
+                    </div> 
+       
+                    <input type="text" name="email" value="{{mail}}" hidden /> 
+       
+       
+       
+                    <div class="modal-footer"> 
+                      <button type="submit" class="btn btn-primary " id="update_pins" disabled> 
+                        Submit 
+                      </button> 
+                    </div> 
+                  </form>
+                {%endif%}
+            </div>
+        </div>
+        {%if(otp)%}
+        <div class="modal-footer">
+            <form action="{{url_for('back')}}" method="post">
+                <button class="btn btn-secondary"  id="otp_faile"  style="display:none;">back
+                    to login page</button>
+            </form>
+            <form method="post" action="{{url_for('rewards')}}">
+                <button class="btn btn-primary" id="otp_succes" style="display:none;">Go to Rewards</button>
+                <button class="btn btn-primary" id="otp_admin" style="display:none;">Go to Admin</button>
+            </form>
+            <form method="post" aaction="http://127.0.0.1:8150/rewards">
+    
+            </form>
+        </div>
+        {%endif%}
+    </div>
+    </div>
+  </div>
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+  <script>
+
+
+    {%if(cpas)%}
+    $(document).ready(function(){
+      $("#exampleModalToggle").modal('show');
+    });
+    $(document).ready(before_model());
+    {%endif%}
+
+    {%if(ld==0)%}
+  $(window).on('load', function () {
+     $('#forgotpass').modal('show'); 
+    });
+    {%endif%}
+
+    {%if(ld==1)%}
+  $(window).on('load', function () {
+     $('#sendotp').modal('show'); 
+    });
+    {%endif%}
+
+    {%if(ld==2)%}
+  $(window).on('load', function () {
+     $('#cnfpwd').modal('show'); 
+    });
+    {%endif%}
+
+    {%if(ld==3)%}
+  $(window).on('load', function () {
+     $('#success').modal('show'); 
+    });
+    {%endif%}
+    {%if(ld==4)%}
+  $(window).on('load', function () {
+     $('#otpfailed').modal('show'); 
+    });
+    {%endif%}
+
+    {%if(otps)%}
+    $(document).ready(showpass());
+    {%endif%}
+    {%if(otp)%}
+    $(document).ready(showotp());
+    {%endif%}
+
+  
+    
+  
+    function showpass() {
+      document.getElementById("email_val").setAttribute('value','{{mail}}');
+      document.getElementById("new").style = "display:none";
+      document.getElementById("ver").style = "display:block";
+      document.getElementById("otp").style = "display:block";
+      document.getElementById("forget_pwd").style = "display:none";
+
+    }
+    function showotp() {
+      document.getElementById("email_val").setAttribute('value','{{mail}}');
+      document.getElementById("new").style = "display:none";
+      document.getElementById("ver").style = "display:block";
+      document.getElementById("pwd").style = "display:block";
+    }
+
+    var check = function() {
+      if (document.getElementById('password').value ==
+        document.getElementById('confirm_password').value) {
+        document.getElementById('message').style.color = 'green';
+        document.getElementById('message').innerHTML = 'matching';
+      } else {
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').innerHTML = 'not matching';
+      }
+    }
+
+
+
+    function Confirm_PINs() { 
+      var pin1 = document.getElementById('pins').value; 
+      var pin2 = document.getElementById('cfm_pins').value; 
+ 
+      if (pin2 != pin1) { 
+        document.getElementById('pin_corrects').innerHTML = "Password Should be same as above"; 
+        document.getElementById('pin_corrects').style.display = "block"; 
+        document.getElementById('update_pins').setAttribute("disabled", "true"); 
+ 
+      } else { 
+        document.getElementById('pin_corrects').style.display = "none"; 
+        document.getElementById('update_pins').removeAttribute("disabled"); 
+ 
+      } 
+    }
+
+    function before_model() {
+      {%if(cpwd=='0')%}
+      {
+        document.getElementById("otp_failed").style = "display:block";
+        document.getElementById("otp_faile").style = "display:block";
+      }
+      {%endif%}
+      {%if(cpwd=='1')%}
+      {
+        if({{admin}}){
+          document.getElementById("otp_success").style = "display:block";
+          document.getElementById("otp_admin").style = "display:block";
+          }
+        else{
+          document.getElementById("otp_success").style = "display:block";
+          document.getElementById("otp_succes").style = "display:block";
+           }
+
+       }
+       {%endif%}
+       
+      
+    }
+
+
+  </script>
+<script>
+function Confirm_PIN() {
+  var pin1 = document.getElementById('pin').value;
+  var pin2 = document.getElementById('cfm_pin').value;
+
+  if (pin2 != pin1) {
+    document.getElementById('pin_correct').innerHTML = "Password Should be same as above";
+    document.getElementById('pin_correct').style.display = "block";
+    document.getElementById('update_pin').setAttribute("disabled","true");
+
+  } else {
+    document.getElementById('pin_correct').style.display = "none";
+    document.getElementById('update_pin').removeAttribute("disabled");
+
+  }
+}
+
+function val(elem){
+  document.getElementById('res').innerText=elem.value
+  if (isNaN(elem.value)){
+    document.getElementById('res').innerText="Please Enter Numbers Only";
+  }
+  else{
+    document.getElementById('res').innerTex="";
+    if (elem.value.length>10 || elem.value.length<10 ){
+      document.getElementById('res').innerText="Mobile Numbers Must Contains Only 10 Digits";
+    }
+    else{
+       document.getElementById('res').innerText=""; 
+    }
+  }
+
+}
+</script>
+</body>
+
+</html>

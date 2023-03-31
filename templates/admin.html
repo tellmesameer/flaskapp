@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+  <style>
+    .button-64 {
+      align-items: center;
+      background-image: linear-gradient(144deg, #AF40FF, #5B42F3 50%, #00DDEB);
+      border: 0;
+      border-radius: 8px;
+      box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+      box-sizing: border-box;
+      color: #FFFFFF;
+      display: flex;
+      font-family: Phantomsans, sans-serif;
+      font-size: 20px;
+      justify-content: center;
+      line-height: 1em;
+      max-width: 100%;
+      min-width: 140px;
+      padding: 3px;
+      text-decoration: none;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    .button-64:active,
+    .button-64:hover {
+      outline: 0;
+    }
+
+    .button-64 span {
+      background-color: rgb(5, 6, 45);
+      padding: 16px 24px;
+      border-radius: 6px;
+      width: 100%;
+      height: 100%;
+      transition: 300ms;
+    }
+
+    .button-64:hover span {
+      background: none;
+    }
+
+    @media (min-width: 768px) {
+      .button-64 {
+        font-size: 24px;
+        min-width: 196px;
+      }
+    }
+  </style>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+
+    function backbutton() {
+      console.log('hello world');
+      location.herf = Flask.url_for('logout', {});
+      $.post(url_for('logout'));
+    }
+
+
+
+  </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for ('static',filename='css/dashboard.css') }}">
+  <!-- jquery cdn -->
+  <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+    crossorigin="anonymous"></script>
+  <!-- font awesome cdn -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+    integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+</head>
+
+<body>
+  <div class="container-fluid">
+    <!-- MENU SIDEBAR For Desktop-->
+    <div class="row">
+      <div class="col-lg-3 d-lg-block d-none z-1" style="background-color: #0e223d; position: relative; height: 100vh">
+        <div class="logo" style="background-color: #0e223d">
+          <!-- <h4 style="color: antiquewhite" class="text-light text-center mt-2">
+              Admin Page
+            </h4> -->
+        </div>
+        <div class="m">
+          <div class="account2">
+            <div class="image img-cir img-120">
+              <img src="{{ url_for ('static', filename='avatar-big-01.png') }}" style="height: 120px; width: 120px" />
+            </div>
+            <h4 class="name text-light">{{mail}}</h4>
+            <a href="{{url_for('logout')}}" class=" text-light " style="background-color: #0e223d; border:none;">Sign
+              out
+            </a>
+          </div>
+          <nav class="navbar-sidebar2">
+            <ul class="list-unstyled navbar__list">
+              <li class="active">
+                <a onclick="dashboard()" class="text-light text-decoration-none dash" id="dash">
+                  <i class="bi bi-speedometer2 text-light " style="font-size: 20px;">&nbsp;&nbsp;</i>Dashboard</a>
+                <!-- <span class="inbox-num">3</span> -->
+              </li>
+              <li class="">
+                <a onclick="recipent()" class="text-light text-decoration-none" id="emp">
+                  <i class="bi bi-person-heart">&nbsp;&nbsp;</i>Employee Integration​</a>
+
+              </li>
+              <li>
+                <a onclick="gift_cycle()" class="text-light text-decoration-none" id="gift">
+                  <i class="bi bi-box2-heart-fill">&nbsp;&nbsp;</i>Gift Cycle</a>
+              </li>
+
+              <li>
+                <a onclick="shipment()" class="text-light text-decoration-none" id="shipments">
+                  <i class="bi bi-truck" style="font-size: 20px;">&nbsp;&nbsp;</i>Shipping Integration</a>
+              </li>
+              <li>
+                <a onclick="order()" class="text-light text-decoration-none" id="orde">
+                  <i class="bi bi-bag-fill" style="font-size: 20px;">&nbsp;&nbsp;</i>Orders</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <!-- END MENU SIDEBAR-->
+      <div class="col-lg-9">
+        <!-- HEADER DESKTOP-->
+        <div class="theme row">
+          <div class="col-12 py-3">
+            <h4 class="mx-auto text-center text-light">
+              <span class="float-end"><button class="btn btn-outline-light ms-2 d-block d-lg-none"
+                  data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+                  <i class="bi bi-list"></i></button></span>
+              <span class="float-end me-2"><i class="bi bi-gift"></i></span>
+            </h4>
+          </div>
+        </div>
+        <!-- offcanvas for mobile view -->
+
+        <div class="offcanvas offcanvas-end d-block" tabindex="-1" id="offcanvasExample"
+          aria-labelledby="offcanvasExampleLabel" style="background-color: #0e223d">
+          <div class="offcanvas-header">
+            <div class="logo" style="background-color: #0e223d">
+              <h4 style="color: antiquewhite" class="text-light">
+                Rewards Page
+              </h4>
+            </div>
+            <button type="button" class="btn-close text-bg-light" data-bs-dismiss="offcanvas"
+              aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <div class="menu-sidebar2__content js-scrollbar1">
+              <div class="account2">
+                <div class="image img-cir img-120">
+                  <img src="avatar-big-01.png" style="height: 120px; width: 120px" />
+                </div>
+                <h4 class="name text-light">{{mail}}</h4>
+                <a href="{{url_for('logout')}}" class=" text-light "
+                  style="background-color: #0e223d; border:none;">Sign out
+                </a>
+              </div>
+              <nav class="navbar-sidebar2">
+                <ul class="list-unstyled navbar__list">
+                  <li class="active">
+                    <a onclick="dashboard()" class="text-light text-decoration-none">
+                      <i class="bi bi-speedometer2 text-light " style="font-size: 20px;">&nbsp;&nbsp;</i>Dashboard</a>
+                    <!-- <span class="inbox-num">3</span> -->
+                  </li>
+                  <li class="">
+                    <a onclick="recipent()" class="text-light text-decoration-none">
+                      <i class="bi bi-person-heart">&nbsp;&nbsp;</i>Recipients</a>
+
+                  </li>
+                  <li>
+                    <a onclick="gift_cycle()" class="text-light text-decoration-none">
+                      <i class="fas fa-shopping-basket">&nbsp;&nbsp;</i>Gift Cycle</a>
+                  </li>
+                  <li>
+                    <a onclick="shipment()" class="text-light text-decoration-none">
+                      <i class="bi bi-truck" style="font-size: 20px;">&nbsp;&nbsp;</i>Shipping Integration</a>
+                  </li>
+                  <li>
+                    <a onclick="order()" class="text-light text-decoration-none">
+                      <i class="bi bi-bag-fill" style="font-size: 20px;">&nbsp;&nbsp;</i>Orders</a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
+        <!-- end offcanvas for mobile view -->
+
+        <!-- Dashboard-->
+        <div id="d_board">
+          <div class="row justify-content-evenly mt-3 roadm p-1">
+            {%for (id,file_naam,file_desc,x) in thambu%}
+            <div class="col">
+              <a href="/dashboardbutton/{{id}}" class="btn btn-dark">{{file_desc}}</a>
+            </div>
+            {%endfor%}
+          </div>
+          <div class="row justify-content-evenly mt-2">
+            <div class="col-5 border border-dark scr" style="height: 70vh;">
+              <canvas id="myChart"></canvas>
+            </div>
+            <div class="col-7 border border-dark " style="height: 70vh;">
+              <div class="text-end p-1" style="height: 10vh;">
+                <a href='../static/files/{{fn}}' download='{{f}}' class="btn btn-outline-dark">Export</a>
+              </div>
+              <div class=" overflow-scroll" style="height: 60vh;">
+                <table id="example" class="display" style="width:100%;">
+
+                  <thead>
+                    <tr>
+                      <th>OrderNumber</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>DeliveryURL</th>
+                      <th>ShippingDate</th>
+                      {%if(ide==5)%}
+                      <th>Reason</th>
+                      {%endif%}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {%if(ide!=5)%}
+                    {%for (OrderNumber,Name,Email,DeliveryURL,ShippingDat) in toos%}
+                    <tr>
+                      <td>{{OrderNumber}}</td>
+                      <td>{{Name}}</td>
+                      <td>{{Email}}</td>
+                      <td>{%if(DeliveryURL)==None%}
+                        Url Is not genrated
+                        {%else%}
+                        {{DeliveryURL}}
+                        {%endif%}
+                      </td>
+                      <td>{{ShippingDat}}</td>
+                    </tr>
+                    {%endfor%}
+                    {%else%}
+                    {%for (OrderNumber,Name,Email,DeliveryURL,ShippingDat,Reason) in toos%}
+                    <tr>
+                      <td>{{OrderNumber}}</td>
+                      <td>{{Name}}</td>
+                      <td>{{Email}}</td>
+                      <td>{%if(DeliveryURL)==None%}
+                        Url Is not genrated
+                        {%else%}
+                        {{DeliveryURL}}
+                        {%endif%}
+                      </td>
+                      <td>{{ShippingDat}}</td>
+                      <td>{{Reason}}</td>
+                    </tr>
+                    {%endfor%}
+                    {%endif%}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- END dashboard-->
+
+        <!--Recipients -->
+        <div id="reci">
+          <section class="au-breadcrumb m-t-75">
+            <div class="section__content section__content--p30">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h3 class="text-center">Recipients Details</h3>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+
+          <section class="au-breadcrumb m-t-75 roadmap">
+            <div class="section__content section__content--p30 ">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="au-breadcrumb-content">
+                      <!-- <button class="au-btn au-btn-icon au-btn--green">
+                            <i class="zmdi zmdi-plus"></i>Add admin</button> -->
+                      <div class="row ">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-1">
+                          <button type="button" class="btn btn-dark text-light" data-bs-toggle="modal"
+                            data-bs-target="#create_user">
+                            Add Recipients
+                          </button>
+                          <button type="button" class="btn btn-dark text-light" data-bs-toggle="modal"
+                            data-bs-target="#uploadcsv">
+                            Bulk Upload
+                          </button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </section>
+
+
+
+
+
+          <br>
+          <!-- Modal for upload a file -->
+          <div class="modal fade" id="uploadcsv" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Upload file</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </button>
+                </div>
+                <form action="{{url_for('new_csv')}}" method="post" enctype="multipart/form-data">
+                  <div class="modal-body">
+                    <div class="form-group">
+                      <div class="btn-group">
+
+                        <label for="GiftCycle">Choose A Giftcycle:</label>
+
+                        <select name="GiftCyclefc" id="GiftCycle">
+                          {%for (id,gfcycledesc,giftdesc,startd,endd)in gcycle %}
+                          <a class="dropdown-item" href="#">{{gfcycledesc}}</a>
+                          <option value="{{id}}">{{id}}({{gfcycledesc}})</option>
+                          {%endfor%}
+
+                        </select>
+
+                      </div>
+                    </div>
+                    <br>
+                    <div class="form-group">
+                      <label for="formFile" class="form-label">Upload Your file here</label>
+                      <input class="form-control" name="file" type="file" id="formFile">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- Modal for adding a New user -->
+          <div class="modal fade" id="create_user" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Create
+                    New User</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <form action="{{url_for('new_emp')}}" method="post">
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">Enter Employee Email</label>
+                      <input type="email" name="newmail" class="form-control" id="exampleInputPassword1"
+                        placeholder="example@ex.com" required>
+                    </div>
+                    <!-- <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Role</label>
+                                    <select class="form-control" name="role">
+                                        <option value="0">Normal user</option>
+                                        <option value="1">Admin</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">account</label>
+                                    <select class="form-control" name="status">
+                                        <option value="0">Inactive</option>
+                                        <option value="1">Active</option>
+                                    </select>
+                                </div> -->
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn text-light" style="background-color: #0e223d;">Submit</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          {%with messages = get_flashed_messages()%}
+
+          {%if messages%}
+
+          {% for message in messages %}
+          {%if temp=='2'%}
+
+          <div class="alert alert-success alert-dismissable" role="alert">
+
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="close">
+
+              <span aria-hidden="true">&times;</span>
+
+            </button>
+            {{message}}
+
+
+          </div>
+          {%endif%}
+
+
+          {%endfor%}
+          {%endif%}
+          {%endwith%}
+
+
+          <!-- STATISTIC-->
+
+          <section>
+            <div class="overflow-y-scroll">
+              <div class="section__content section__content--p30 " style="height: 65vh;">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-xl-12">
+                      <!-- USER DATA-->
+                      <div class="user-data m-b-40 roadmap">
+                        <!-- <h3 class="title-3 m-b-30">
+                                        <i class="zmdi zmdi-account-calendar"></i>Recipients Inf
+                                    </h3> -->
+
+                        <div class="table-responsive  ">
+                          <table id="tables" class="display" style="width:100%">
+                            <thead>
+                              <tr>
+                                <th>Id</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Gift Status</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for(id,name,email,phno,giftstatus) in resi %}
+                              <tr>
+                                <th>{{id}}</th>
+                                <th>{{name}}</th>
+                                <th>{{email}}</th>
+                                <th>{{phno}}</th>
+                                <th>{% if(giftstatus=='N') %}
+                                  Not Ordered
+                                  {%elif(giftstatus=='C')%}
+                                  Added to Cart
+                                  {%elif(giftstatus=='O')%}
+                                  OrderPlaced
+                                  {%elif(giftstatus=='S')%}
+                                  Order Shipped
+                                  {%elif(giftstatus=='T')%}
+                                  Order in Transit
+                                  {%elif(giftstatus=='D')%}
+                                  Order Delivered <i class="bi bi-check2 text-success"></i>
+                                  {%elif(giftstatus=='U')%}
+                                  Order Undelivered <i class="bi bi-x text-danger"></i>
+                                  {%else%}
+                                  Not Ordered
+                                  {%endif%}
+
+                                </th>
+                                <th>
+                                  {% if(giftstatus=='N') %}
+                                  <a href="/dele/{{email}}" class="btn  btn-xs"
+                                    onclick="return confirm('Are you sure to delete?')"><i class="bi bi-trash3"
+                                      title="delete"></i>
+                                    {%endif%}
+                                  </a>
+                                </th>
+                              </tr>
+                              {%endfor%}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <!-- END USER DATA-->
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+
+        </div>
+        <!-- End Recipients-->
+        <br>
+        <!-- Gift Cycle-->
+        <div id="g_cycle">
+
+
+          <section class="au-breadcrumb m-t-75 roadmap">
+            <div class="section__content section__content--p30 ">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="au-breadcrumb-content">
+                      <!-- <button class="au-btn au-btn-icon au-btn--green">
+                          <i class="zmdi zmdi-plus"></i>Add admin</button> -->
+                      <div class="row ">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mb-1">
+                          <button type="button" class="btn text-light" data-bs-toggle="modal"
+                            data-bs-target="#newgiftcycle" style="background-color: #0e223d;">
+                            <i class="bi bi-plus-circle-dotted" title=" Add Giftcycle"></i>
+                          </button>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </section>
+
+
+          {%with messages = get_flashed_messages()%}
+
+          {%if messages%}
+
+          {% for message in messages %}
+          {%if temp=='3'%}
+
+          <div class="alert alert-success alert-dismissable" role="alert">
+
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="close">
+
+              <span aria-hidden="true">&times;</span>
+
+            </button>
+            {{message}}
+
+
+          </div>
+          {%endif%}
+
+
+          {%endfor%}
+          {%endif%}
+          {%endwith%}
+
+          <br>
+          <section>
+            <div class="section__content section__content--p30">
+              <div class="container-fluid">
+                <div class="row">
+                  <div class="col-xl-12">
+                    <!-- USER DATA-->
+                    <div class="user-data m-b-40 roadmap">
+                      <table class="table">
+                        <thead>
+                          <tr style="background-color: #94e83861;">
+                            <th>Id</th>
+                            <th>Giftcycle Desc </th>
+                            <th>Gift Desc</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {%for (id,gfcycledesc,giftdesc,startd,endd)in gcycle %}
+                          <tr>
+                            <th>{{id}}</th>
+                            <th>{{gfcycledesc}}</th>
+                            <th>{{giftdesc}}</th>
+                            <th>{{startd}}</th>
+                            <th>{{endd}}</th>
+                            <th>
+                              <button type="button" class="btn  btn-xs " data-bs-toggle="modal"
+                                data-bs-target="#editmodel{{id}}">
+                                <i class="bi bi-pencil-square " title="edit"></i>
+                              </button>
+
+                              <a href="/delete/{{id}}" class="btn  btn-xs"
+                                onclick="return confirm('Are you sure to delete?')"><i class="bi bi-trash3"
+                                  title="delete"></i>
+                              </a>
+                            </th>
+                          </tr>
+                          {%endfor%}
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+
+        <!-- End Gift Cycle-->
+
+
+
+
+
+
+        <!-- shipment-->
+        <div id="shipment">
+          <div class="row justify-content-evenly roadm mt-1 p-2 ">
+            <div class="col">
+              <button class="btn btn-dark p-2" role="button" data-bs-toggle="modal" data-bs-target="#genorder"><span
+                  class="text">Generate Order list</span></button>
+            </div>
+            <div class="col ">
+              <button class="btn btn-dark p-2" role="button"><span class="text" data-bs-toggle="modal"
+                  data-bs-target="#updateorder">Update Tracking Info</span></button>
+            </div>
+          </div>
+          <div>
+            <br>
+            {%with messages = get_flashed_messages()%}
+
+            {%if messages%}
+
+            {% for message in messages %}
+            {%if temp=='3'%}
+
+            <div class="alert alert-success alert-dismissable" role="alert">
+
+              <button type="button" class="close" data-bs-dismiss="alert" aria-label="close">
+
+                <span aria-hidden="true">&times;</span>
+
+              </button>
+              {{message}}
+
+
+            </div>
+            {%endif%}
+
+
+            {%endfor%}
+            {%endif%}
+            {%endwith%}
+            {%if(usrq=='1')%}
+            {%for(names,ys)in cs %}
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" disabled placeholder="Recipient's username"
+                aria-label="Recipient's username" aria-describedby="button-addon2" value="{{names}}">
+              <a class="btn btn-outline-dark" href="../static/files/{{names}}" download="{{names}}" type="button"
+                id="button-addon2">Export</a>
+            </div>
+            <div id="CSVTable" class=" overflow-scroll displa" style="height:65vh; width:100%;">
+              <table id="news" class=" table">
+                <thead>
+                  <tr>
+                    <th>OrderId</th>
+                    <th>OrderNumber</th>
+                    <th>OrderDate</th>
+                    <th>RecipientId</th>
+                    <th>GiftCycleId</th>
+                    <th>ShippingAddress</th>
+                    <th>ShippingCity</th>
+                    <th>ShippingState</th>
+                    <th>ShippingZIP</th>
+                    <th>ShippingCountry</th>
+                    <th>DeliveryURL</th>
+                    <th>DockerNumber</th>
+                    <th>DockerDateUpdated</th>
+                    <th>ShippingDate</th>
+                    <th>CreateUserId</th>
+                    <th>UpdateUserId</th>
+                    <th>CreateDate</th>
+                    <th>UpdateDate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {%for (OrderId
+                  , OrderNumber
+                  , OrderDate
+                  , RecipientId
+                  , GiftCycleId
+                  , ShippingAddress
+                  , ShippingCity
+                  , ShippingState
+                  , ShippingZIP
+                  , ShippingCountry
+                  , DeliveryURL
+                  , DockerNumber
+                  , DockerDateUpdated
+                  , ShippingDate
+                  , CreateUserId
+                  , UpdateUserId
+                  , CreateDate
+                  , UpdateDate
+                  ) in held%}
+                  <tr>
+                    <td>{{OrderId}}</td>
+                    <td>{{OrderNumber}}</td>
+                    <td>{{OrderDate}}</td>
+                    <td>{{RecipientId}}</td>
+                    <td>{{GiftCycleId}}</td>
+                    <td>{{ShippingAddress}}</td>
+                    <td>{{ShippingCity}}</td>
+                    <td>{{ShippingState}}</td>
+                    <td>{{ShippingZIP}}</td>
+                    <td>{{ShippingCountry}}</td>
+                    <td>{{DeliveryURL}}</td>
+                    <td>{{DockerNumber}}</td>
+                    <td>{{DockerDateUpdated}}</td>
+                    <td>{{ShippingDate}}</td>
+                    <td>{{CreateUserId}}</td>
+                    <td>{{UpdateUserId}}</td>
+                    <td>{{CreateDate}}</td>
+                    <td>{{UpdateDate}}</td>
+                  </tr>
+                  {%endfor%}
+                </tbody>
+              </table>
+
+
+
+
+            </div>
+            {%endfor%}
+            {%endif%}
+
+          </div>
+
+
+          <div class="d-lg-block d-none" id='footer' style='background-color:white; '>
+            <p class="text-center">Copyright © 2023 Datanutts IT Solutions. All rights reserved. </p>
+
+          </div>
+
+
+          <!-- Modal for  generate order list -->
+          <div class="modal fade" id="genorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <h5>Generate order list where Order is placed and shipping is pending</h5>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <form action="{{url_for('ship_inti')}}" method="post">
+                    <button type="submit" class="btn btn-primary">Generate Reports</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
+
+          <!-- end -->
+
+
+
+
+          <!-- Modal for  generate order list -->
+          <div class="modal fade" id="updateorder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <form action="{{url_for('csvupdate')}}" method="post" enctype="multipart/form-data">
+                  <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <h5>
+                      Upload csv received by shipping and update database for Delivery URL column. Send URL to
+                      respective Users.
+                    </h5>
+                    <h6 class="text-danger">Note:- Date Format Should Be In MM-DD-YYYY </h6>
+                    <label for="formFile" class="form-label">Upload Your file here</label>
+                    <input class="form-control" name="file" type="file" id="formFile">
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Update Reports</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- end -->
+
+          <!-- END shipment-->
+
+
+          <!-- Gift-->
+          <!-- <div id="gifts">
+                <section class="au-breadcrumb m-t-75">
+                    <div class="section__content section__content--p30">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <h3 class="text-center">Gift Section</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section class="au-breadcrumb m-t-75 bg-primary-subtle">
+                    <div class="section__content section__content--p30 ">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="au-breadcrumb-content">
+                                        <div class="au-breadcrumb-left">
+                                            <ul class="list-unstyled list-inline au-breadcrumb__list">
+            
+                                            </ul>
+                                        </div>
+                                  
+                                        <div class="row">
+                                            <div class="col ">
+                                                <button type="button" class="btn text-light" data-bs-toggle="modal"
+                                                    data-bs-target="#gifthamper" style="background-color: #0e223d;">
+                                                    Add Hampers
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+<br>
+                <section class="statistic">
+                    <div class="section__content section__content--p30">
+                        <div class="container-fluid">
+                            <div class="row  ">
+                                <div class="col-lg-4 col-md-4 col-sm-6">
+                                    <div class="card">
+                                        <img src="{{ url_for ('static', filename='gift.png') }}" class="card-img-top"
+                                            alt="Gifts">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-dark">Gift Hamper 1</h5>
+                                            <p>Availaible</p>
+                                            <button class="btn btn-primary float-end">Add/Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-6">
+                                    <div class="card">
+                                        <img src="{{ url_for ('static', filename='gift.png') }}" class="card-img-top"
+                                            alt="Gifts">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-dark">Gift Hamper 2</h5>
+                                            <p>Availaible</p>
+                                            <button class="btn btn-primary float-end">Add/Remove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div> -->
+
+          <!-- Modal for adding new gift hamper -->
+          <!-- <div class="modal fade" id="gifthamper" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Create
+                                New Hamper gift</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="http://127.0.0.1:8150/new_emp" method="post">
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Enter Gift Hamper Name </label>
+                                    <input type="text" name="Hamper_name" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputPassword1">Quantity </label>
+                                    <input type="number" name="Hamper_qty" class="form-control" required>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </div>
+                        </form>
+                    </div>
+                </div>
+            </div> -->
+          <!-- END Gift-->
+
+
+
+        </div>
+
+        <!-- orders -->
+        <div id="ord">
+
+          {%with messages = get_flashed_messages()%}
+
+          {%if messages%}
+
+          {% for message in messages %}
+          {%if temp=='5'%}
+
+          <div class="alert alert-success alert-dismissable" role="alert">
+
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="close">
+
+              <span aria-hidden="true">&times;</span>
+
+            </button>
+            {{message}}
+
+
+          </div>
+          {%endif%}
+
+
+          {%endfor%}
+          {%endif%}
+          {%endwith%}
+          <section>
+            <div class="overflow-y-scroll">
+              <div class="section__content section__content--p30 " style="height: 70vh;">
+                <div class="container-fluid">
+                  <div class="row">
+                    <div class="col-xl-12">
+                      <!-- USER DATA-->
+                      <div class="user-data m-b-40 roadmap">
+                        <!-- <h3 class="title-3 m-b-30">
+                                        <i class="zmdi zmdi-account-calendar"></i>Recipients Inf
+                                    </h3> -->
+
+                        <div class="table-responsive  ">
+                          <table id="tabl" class="display" style="width:100%">
+                            <thead>
+                              <tr>
+                                <th>Id</th>
+                                <th>Order No</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone Number</th>
+                                <th>Order Status</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for(id,name,email,phno,giftstatus,ono) in ordered %}
+                              <tr>
+                                <th>{{id}}</th>
+                                <th>{{ono}}</th>
+                                <th>{{name}}</th>
+                                <th>{{email}}</th>
+                                <th>{{phno}}</th>
+                                <th>{% if(giftstatus=='C') %}
+                                      Added To Cart
+                                  {%elif(giftstatus=='O')%}
+                                      Order Placed
+                                  {%elif(giftstatus=='S')%}
+                                  Order Shipped
+                                  {%elif(giftstatus=='T')%}
+                                  Order in Transit
+                                  {%elif(giftstatus=='D')%}
+                                  Order Delivered <i class="bi bi-check2 text-success"></i>
+                                 {%elif(giftstatus=='U')%}
+                                  Order Undelivered <i class="bi bi-x text-danger"></i>
+                  
+                                  {%endif%}
+
+                                </th>
+                                <th>
+                                
+                                  <a href="/delet/{{id}}" class="btn  btn-xs"
+                                    onclick="return confirm('Are you sure to delete?')"><i class="bi bi-trash3"
+                                      title="delete"></i>
+                  
+                                  </a>
+                                </th>
+                              </tr>
+                              {%endfor%}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                      <!-- END USER DATA-->
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+        <!-- Add new Gift Cycle-->
+        <div class="modal fade" id="newgiftcycle" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add A New Gift Cycle</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <form action="{{url_for('newgiftcycle')}}" method="post">
+                <div class="modal-body">
+                  <div class="form-group mt-3">
+                    <label class="form-control-placeholder" for="username">Gift Cycle Desc</label>
+                    <input type="text" name="gcycledesc" class="form-control" required>
+                  </div>
+                  <div class="form-group mt-3">
+                    <label class="form-control-placeholder" for="username">Gift Desc</label>
+                    <input type="text" name="giftdesc" class="form-control" required>
+                  </div>
+                  <div class="form-group mt-3">
+                    <label class="form-control-placeholder" for="username">start date</label>
+                    <input type="date" name="startdate" class="form-control" required>
+                  </div>
+                  <div class="form-group mt-3">
+                    <label class="form-control-placeholder" for="username">End date</label>
+                    <input type="date" name="enddate" class="form-control" required>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="submit" class="btn text-light" style="background-color: #0e223d;">Submit</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!--End Add new Gift Cycle-->
+
+
+
+
+        <!-- Edit model in Recipents -->
+        {%for (id,gfcycledesc,giftdesc,startd,endd)in gcycle %}
+        <div class="modal fade" id="editmodel{{id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+          aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">
+                  Update info</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="{{url_for('update_giftcycle')}}" method="post">
+
+                  <input type="number" name="gfid" value="{{id}}" hidden>
+                  <div class="form-group mt-3">
+                    <label class="form-control-placeholder" for="username">Gift Cycle Desc</label>
+                    <input type="text" name="gcycledesc" value="{{gfcycledesc}}" class="form-control">
+                  </div>
+                  <div class="form-group mt-3">
+                    <label class="form-control-placeholder" for="username">Gift Desc</label>
+                    <input type="text" name="giftdesc" value="{{giftdesc}}" class="form-control">
+                  </div>
+                  <div class="form-group mt-3">
+                    <label class="form-control-placeholder" for="username">start date</label>
+                    <input type="date" name="startdate" class="form-control" value="{{startd}}">
+                  </div>
+                  <div class="form-group mt-3">
+                    <label class="form-control-placeholder" for="username">End date</label>
+                    <input type="date" name="enddate" class="form-control" value="{{endd}}">
+                  </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Save
+                  changes</button>
+              </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        {%endfor%}
+
+
+        <!-- end edit model in Recipents -->
+
+
+
+
+
+
+      </div>
+
+    </div>
+    <footer class=" position-fixed bottom-0" style="width: 100%;">
+      <div class="row pb-2 text-dark mt-3" style="background-color: #f1f1f1;">
+        <div class="col-12 text-center"><samp><i>
+              Copyright © 2023 Datanutts IT Solutions. All Rights Reserved.</i></samp>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: [
+          {%for(file_desc,) in mys%}
+          '{{file_desc}}',
+      {% endfor %}
+          ],
+      datasets: [{
+        label: '# ',
+        data: {{ counts }},
+      backgroundColor: [
+        {%for (file_desc,) in mys %}
+    {%if (file_desc == 'Total Orders')%}
+    'rgb(0,191,255)',
+      {% elif(file_desc == 'Orders Genrated') %}
+    'orange',
+      {% elif(file_desc == 'Orders Shipped') %}
+    'yellow',
+      {% elif(file_desc == 'Orders Delivered') %}
+    'green',
+      {% elif(file_desc == 'Orders Undelivered') %}
+    'red'
+    {% endif %}
+    {% endfor %}
+     
+    ],
+
+    borderWidth: 1
+          }]
+        },
+    options: {
+    }
+      });
+  </script>
+
+
+
+
+
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script>
+    $(document).ready(function () {
+      $('#news').DataTable();
+    });
+
+    $(window).on('navigate', function (event, data) {
+      var direction = data.state.direction;
+      if (direction == 'back') {
+        $.post(url_for('logout'));
+      }
+      if (direction == 'forward') {
+        $.post(url_for('logout'));
+      }
+    }
+
+    );
+
+
+    jQuery(document).ready(function ($) {
+      if (window.history && window.history.pushState) {
+        window.history.pushState('forward', null, './#forward');
+        $(window).on('popstate', function () {
+          $.post(url_for('logout'));
+        });
+      }
+    });
+
+    $(document).ready(function () {
+      $('#tables').DataTable();
+    });
+
+    $(document).ready(function () {
+      $('#example').DataTable();
+    });
+
+    $(document).ready(function () {
+      $('#tabl').DataTable();
+    });
+
+    {%if temp == '2' %}
+    $(document).ready(recipent());
+    {% elif temp == '3' %}
+    $(document).ready(gift_cycle());
+    {% elif temp == '4' %}
+    $(document).ready(shipment());
+    {% elif temp == '5' %}
+    $(document).ready(order());
+    {% else %}
+    $(document).ready(dashboard());
+    {% endif %}
+
+    function dashboard() {
+      document.getElementById("d_board").style = "display:block";
+      document.getElementById("reci").style = "display:none";
+      document.getElementById("g_cycle").style = "display:none";
+      document.getElementById("shipment").style = "display:none";
+      document.getElementById("ord").style = "display:none";
+
+
+
+    }
+    function recipent() {
+      document.getElementById("d_board").style = "display:none";
+      document.getElementById("reci").style = "display:block";
+      document.getElementById("g_cycle").style = "display:none";
+
+      document.getElementById("shipment").style = "display:none";
+      document.getElementById("ord").style = "display:none";
+
+    }
+    function gift_cycle() {
+      document.getElementById("d_board").style = "display:none";
+      document.getElementById("reci").style = "display:none";
+      document.getElementById("g_cycle").style = "display:block";
+      document.getElementById("shipment").style = "display:none";
+      document.getElementById("ord").style = "display:none";
+
+
+    }
+    function shipment() {
+      document.getElementById("d_board").style = "display:none";
+      document.getElementById("reci").style = "display:none";
+      document.getElementById("g_cycle").style = "display:none";
+      document.getElementById("shipment").style = "display:block";
+      document.getElementById("ord").style = "display:none";
+
+    }
+     
+    function order() {
+      document.getElementById("d_board").style = "display:none";
+      document.getElementById("reci").style = "display:none";
+      document.getElementById("g_cycle").style = "display:none";
+      document.getElementById("shipment").style = "display:none";
+      document.getElementById("ord").style = "display:block";
+    }
+ 
+  </script>
+</body>
+
+</html>
