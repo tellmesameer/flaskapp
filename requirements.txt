@@ -3,3 +3,4 @@ pandas==1.5.3
 pyodbc==4.0.35
 python-dotenv==1.0.0
 PyMails==0.0.5
+gunicorn==20.1.0
