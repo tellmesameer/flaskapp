@@ -347,7 +347,6 @@
 
                         <select name="GiftCyclefc" id="GiftCycle">
                           {%for (id,gfcycledesc,giftdesc,startd,endd)in gcycle %}
-                          <a class="dropdown-item" href="#">{{gfcycledesc}}</a>
                           <option value="{{id}}">{{id}}({{gfcycledesc}})</option>
                           {%endfor%}
 
@@ -1210,7 +1209,7 @@
         {%for (file_desc,) in mys %}
     {%if (file_desc == 'Total Orders')%}
     'rgb(0,191,255)',
-      {% elif(file_desc == 'Orders Genrated') %}
+      {% elif(file_desc == 'Orders Generated') %}
     'orange',
       {% elif(file_desc == 'Orders Shipped') %}
     'yellow',
