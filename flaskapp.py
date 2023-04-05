@@ -27,9 +27,19 @@ app.config["DEBUG"] = True
 
 
 # connection details for azure DB
+# try:
+#     mydb = pyodbc.connect(driver="ODBC Driver 18 for SQL Server",
+#                         host="erewardsportal001.database.windows.net", database="giftportal",
+#                         uid="dbadmin", pwd="Password@123")
+# except pyodbc.Error as drror:
+#         if drror.args[0] == "42000":
+#             print('Try again later because your internet is slow and the database is timed out.')
+#         else:
+#             print('Add Your Ip first .')
 mydb = pyodbc.connect(driver="ODBC Driver 18 for SQL Server",
                         host="erewardsportal001.database.windows.net", database="giftportal",
                         uid="dbadmin", pwd="Password@123")
+
 # Starting cursor to fetch all the details
 mycursor = mydb.cursor()
 mycursor.execute("SELECT * FROM [dbo].[User]")
@@ -163,13 +173,14 @@ def rewards():
                     global totalorders
                     global count_query
                     global mys
+                    global dta
                     temp_admin = 5
                     try:
                         mycursor.execute(
                             '''SELECT [RecipientId],[Name],[Email],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] ''')
                         resi = mycursor.fetchall()
                         mycursor.execute(
-                            '''SELECT  [id],[file_naam],[file_desc],[query_used] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
+                            '''SELECT  [id],[file_naam],[file_desc],[query_used],[icons] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
                         bus = mycursor.fetchall()
                         mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
                         gfcycle = mycursor.fetchall()
@@ -181,7 +192,7 @@ def rewards():
                             '''SELECT [query_used_count] FROM [dbo].[csv_data] where [id] !=%d  order by [id]''' % (6,))
                         count_query = mycursor.fetchall()
 
-                        mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+                        mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
                         ordered=mycursor.fetchall()
                     except:
                         session['_flashes'].clear()
@@ -210,7 +221,7 @@ def rewards():
                         '''SELECT [file_desc] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
                     mys = mycursor.fetchall()
                     try:
-                        return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys, fn=realname,ordered=ordered)
+                        return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys, fn=realname,ordered=ordered,ide='1')
                     except:
                         flash('A update was made in the backend, so you signed out. ')
                         return render_template('newlogin.html')
@@ -243,7 +254,7 @@ def dashboardbutton(id_data):
         '''SELECT [RecipientId],[Name],[Email],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] ''')
     resi = mycursor.fetchall()
     mycursor.execute(
-        '''SELECT  [id],[file_naam],[file_desc],[query_used] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
+        '''SELECT  [id],[file_naam],[file_desc],[query_used],[icons] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
     bus = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
@@ -251,7 +262,7 @@ def dashboardbutton(id_data):
     mycursor.execute(
         '''SELECT [file_naam], [query_used] FROM [dbo].[csv_data] where [id] =%d order by [id]''' % (id_data,))
     lhs = mycursor.fetchall()
-    mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
     ordered=mycursor.fetchall()
 
     for (a, x,) in lhs:
@@ -292,9 +303,16 @@ def dashboardbutton(id_data):
         mycursor.execute(
             '''SELECT [file_desc] FROM [dbo].[csv_data] where [id] =%d or [id] =%d  order by [id]''' % (1, int(id_data),))
     mys = mycursor.fetchall()
-
-    return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys, fn=realname,ide=id_data,ordered=ordered)
-
+    try:
+        return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys, fn=realname,ide=id_data,ordered=ordered)
+    except:
+            session['_flashes'].clear()
+            session.pop('loggedin', None)
+            session.pop('mail', None)
+            session.clear()
+            flash('Try Again ')
+            return render_template('newlogin.html')
+        
 
 @app.route('/confirm', methods=["post"])
 def confirm():
@@ -516,7 +534,7 @@ def placeorder():
                     <b>Your Order Number is: %s</b>
                     <p>We're getting your order ready to be shipped.We will notify you when it has<br> been sent.</p>
                     <p>Login to see your order</p>
-                    <a href="https://erewardsportal.azurewebsites.net/"
+                    <a href="http://rewards.centralindia.cloudapp.azure.com:5000/"
                         style="height:200px; background-color:blue; color:white; text-decoration:none; padding:8px; margin-bottom:10px; border: 1px solid  black;">
                         Login</a>
                     <br>
@@ -811,7 +829,7 @@ def ship_inti():
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
 
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
             ordered=mycursor.fetchall()
             flash('Not Generating CSV Attempt once more')
             return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys, cs=csvname, held=held,usrq=usr,ordered=ordered)
@@ -833,7 +851,7 @@ def ship_inti():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
     ordered=mycursor.fetchall()
     return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys, cs=csvname, held=held,usrq=usr,ordered=ordered)
 
@@ -886,7 +904,7 @@ def dele(id_data):
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
             ordered=mycursor.fetchall()
             flash("No record has been removed because of delete query")
             return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -903,7 +921,7 @@ def dele(id_data):
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    mycursor.execute(''' select [dbo].[Recipient].[RecipientId], [Name] ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
     ordered=mycursor.fetchall()
     flash("Record Has Been Deleted Successfully")
     return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -926,7 +944,7 @@ def delete(id_data):
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
             ordered=mycursor.fetchall()
             flash("No record has been removed")
             return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -942,7 +960,7 @@ def delete(id_data):
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
     ordered=mycursor.fetchall()
     flash("Record Has Been Deleted Successfully")
     return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -965,7 +983,7 @@ def delet(id_data):
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
             ordered=mycursor.fetchall()
             flash("No record has been removed because of delete query")
             return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -982,10 +1000,65 @@ def delet(id_data):
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
     ordered=mycursor.fetchall()
     flash("Record Has Been Deleted Successfully")
     return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
+
+# for update status of gift
+@app.route('/upstatus', methods=['POST'])
+def upstatus():
+    temp_admin='5'
+    rid=request.form['rid']
+    oid=request.form['oid']
+    staus=request.form['staus']
+    rea=request.form['reasonf']
+    
+    try:
+        if staus=='D':
+             inos=  ''' insert into [dbo].[OrderStatus]( [OrderId],[OrderStatus],[StatusDate]) values ('%s',1,'%s') ''' %(oid,today)
+             mycursor.execute(inos)
+             add_user = '''Update  [dbo].[Recipient] set [RecipientGiftStatus]='D' WHERE [RecipientId]='%s' ''' % rid
+             mycursor.execute(add_user)
+             mydb.commit()
+        elif staus=='U':
+              
+              inos=  ''' insert into [dbo].[OrderStatus]( [OrderId],[OrderStatus],[StatusDate],[reason]) values ('%s',0,'%s','%s') ''' %(oid,today,rea)
+              mycursor.execute(inos)
+              add_user = '''Update  [dbo].[Recipient] set [RecipientGiftStatus]='U' WHERE [RecipientId]='%s' ''' % rid
+              mycursor.execute(add_user)
+              mydb.commit()
+
+
+    except:
+        try:
+            mycursor.execute(
+            '''SELECT [RecipientId],[Name],[Email],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] ''')
+            resi = mycursor.fetchall()
+            mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
+            gfcycle = mycursor.fetchall()
+            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            ordered=mycursor.fetchall()
+            flash("No record has been Updated")
+            return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
+        except:
+            session['_flashes'].clear()
+            session.pop('loggedin', None)
+            session.pop('mail', None)
+            session.clear()
+            flash('Unexpected error occurred in databse ')
+            return render_template('newlogin.html')
+        
+    mycursor.execute(
+        '''SELECT [RecipientId],[Name],[Email],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] ''')
+    resi = mycursor.fetchall()
+    mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
+    gfcycle = mycursor.fetchall()
+    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    ordered=mycursor.fetchall()
+    flash("Record Has Been Updated Successfully")
+    return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
+
 
 
 @app.route('/csvupdate', methods=["post"])
@@ -999,7 +1072,7 @@ def csvupdate():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
     ordered=mycursor.fetchall()
 
     uploaded_file = request.files['file']
@@ -1140,7 +1213,7 @@ def new_csv():
                     resi = mycursor.fetchall()
                     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
                     gfcycle = mycursor.fetchall()
-                    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+                    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
                     ordered=mycursor.fetchall()
                     flash('Unexpected error occurred in databse ')
                     return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1158,7 +1231,7 @@ def new_csv():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
     ordered=mycursor.fetchall()
     flash("Csv inserted Successfully")
     return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1183,7 +1256,7 @@ def newgiftcycle():
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
             ordered=mycursor.fetchall()
             flash('Some error in insertion')
             return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1200,7 +1273,7 @@ def newgiftcycle():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
     ordered=mycursor.fetchall()
     flash('Your Gift cycle is created')
     return render_template('admin.html', mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1211,9 +1284,10 @@ def newgiftcycle():
 def new_emp():
     temp_admin = '2'
     newmail = str(request.form['newmail'])
+    gfid=int(request.form['GiftCyclefc'])
     try:
         mycursor.execute(
-            '''insert into [dbo].[User] ([UserEmail],[UserAuthenticationStatus],[GiftCycleId]) values('%s','I',1)  ''' % (newmail,))
+            '''insert into [dbo].[User] ([UserEmail],[UserAuthenticationStatus],[GiftCycleId]) values('%s','I',%d)  ''' % (newmail,gfid,))
         mycursor.execute(
             '''insert into [dbo].[Recipient] ([Email],[RecipientGiftStatus]) values('%s','N')  ''' % (newmail,))  
         mydb.commit() 
@@ -1224,7 +1298,7 @@ def new_emp():
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
             ordered=mycursor.fetchall()
             if drror.args[0] == "23000":
                 flash('This User is already in database ')
@@ -1244,7 +1318,7 @@ def new_emp():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
     ordered=mycursor.fetchall()
     message = MIMEMultipart("alternatives")
     message['Subject']='Welcome User'
@@ -1269,7 +1343,7 @@ def new_emp():
           Congratulations your email has been successfully added now you can complete the verification and activate the account through eGiftPortal link is given below
          </h5>
          
-         <a href="https://erewardsportal.azurewebsites.net/" style="height:200px; background-color:blue; color:white; text-decoration:none; padding:10px; margin-bottom:10px;"> Activate your account</a>
+         <a href="http://rewards.centralindia.cloudapp.azure.com:5000/" style="height:200px; background-color:blue; color:white; text-decoration:none; padding:10px; margin-bottom:10px;"> Activate your account</a>
          <br>
          <br>
          <hr>
@@ -1327,7 +1401,7 @@ def update_giftcycle():
         mycursor.execute(
             '''SELECT [RecipientId],[Name],[Email],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] ''')
         resi = mycursor.fetchall()
-        mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+        mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
         ordered=mycursor.fetchall()
         mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
         gfcycle = mycursor.fetchall()

@@ -84,10 +84,7 @@
   <!-- jquery cdn -->
   <script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
     crossorigin="anonymous"></script>
-  <!-- font awesome cdn -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-    integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.css" integrity="sha512-Z0kTB03S7BU+JFU0nw9mjSBcRnZm2Bvm0tzOX9/OuOuz01XQfOpa0w/N9u6Jf2f1OAdegdIPWZ9nIZZ+keEvBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
 </head>
@@ -95,8 +92,8 @@
 <body>
   <div class="container-fluid">
     <!-- MENU SIDEBAR For Desktop-->
-    <div class="row">
-      <div class="col-lg-3 d-lg-block d-none z-1" style="background-color: #0e223d; position: relative; height: 100vh">
+    <div class="row ">
+      <div class="col-lg-2 d-lg-block d-none z-1 "  style="background-color: #0e223d;  position: relative; height: 100vh">
         <div class="logo" style="background-color: #0e223d">
           <!-- <h4 style="color: antiquewhite" class="text-light text-center mt-2">
               Admin Page
@@ -108,33 +105,33 @@
               <img src="{{ url_for ('static', filename='avatar-big-01.png') }}" style="height: 120px; width: 120px" />
             </div>
             <h4 class="name text-light">{{mail}}</h4>
-            <a href="{{url_for('logout')}}" class=" text-light " style="background-color: #0e223d; border:none;">Sign
+            <a href="{{url_for('logout')}}" class="text-decoration-none text-light  " style=" border:none;">Sign
               out
             </a>
           </div>
-          <nav class="navbar-sidebar2">
+          <nav class="navbar-sidebar2 ">
             <ul class="list-unstyled navbar__list">
-              <li class="active">
-                <a onclick="dashboard()" class="text-light text-decoration-none dash" id="dash">
-                  <i class="bi bi-speedometer2 text-light " style="font-size: 20px;">&nbsp;&nbsp;</i>Dashboard</a>
+              <li id="a11" class="active">
+                <a onclick="dashboard()" class=" text-decoration-none dash text-light" id="dash">
+                  <i class="bi bi-speedometer2  " style="font-size: 20px;">&nbsp;&nbsp;</i>Dashboard</a>
                 <!-- <span class="inbox-num">3</span> -->
               </li>
-              <li class="">
-                <a onclick="recipent()" class="text-light text-decoration-none" id="emp">
+              <li class="" id="a12">
+                <a onclick="recipent()" class=" text-decoration-none text-light" id="emp">
                   <i class="bi bi-person-heart">&nbsp;&nbsp;</i>Employee Integration​</a>
 
               </li>
-              <li>
-                <a onclick="gift_cycle()" class="text-light text-decoration-none" id="gift">
+              <li id="a13">
+                <a onclick="gift_cycle()" class=" text-decoration-none text-light" id="gift">
                   <i class="bi bi-box2-heart-fill">&nbsp;&nbsp;</i>Gift Cycle</a>
               </li>
 
-              <li>
-                <a onclick="shipment()" class="text-light text-decoration-none" id="shipments">
+              <li id="a14">
+                <a onclick="shipment()" class="text-decoration-none text-light" id="shipments">
                   <i class="bi bi-truck" style="font-size: 20px;">&nbsp;&nbsp;</i>Shipping Integration</a>
               </li>
-              <li>
-                <a onclick="order()" class="text-light text-decoration-none" id="orde">
+              <li id="a15">
+                <a onclick="order()" class=" text-decoration-none text-light" id="orde">
                   <i class="bi bi-bag-fill" style="font-size: 20px;">&nbsp;&nbsp;</i>Orders</a>
               </li>
             </ul>
@@ -142,7 +139,7 @@
         </div>
       </div>
       <!-- END MENU SIDEBAR-->
-      <div class="col-lg-9">
+      <div class="col-lg-10">
         <!-- HEADER DESKTOP-->
         <div class="theme row">
           <div class="col-12 py-3">
@@ -180,25 +177,25 @@
               </div>
               <nav class="navbar-sidebar2">
                 <ul class="list-unstyled navbar__list">
-                  <li class="active">
+                  <li class="active" id="a1">
                     <a onclick="dashboard()" class="text-light text-decoration-none">
                       <i class="bi bi-speedometer2 text-light " style="font-size: 20px;">&nbsp;&nbsp;</i>Dashboard</a>
                     <!-- <span class="inbox-num">3</span> -->
                   </li>
-                  <li class="">
+                  <li class="" id="a2">
                     <a onclick="recipent()" class="text-light text-decoration-none">
                       <i class="bi bi-person-heart">&nbsp;&nbsp;</i>Recipients</a>
 
                   </li>
-                  <li>
+                  <li id="a3">
                     <a onclick="gift_cycle()" class="text-light text-decoration-none">
                       <i class="fas fa-shopping-basket">&nbsp;&nbsp;</i>Gift Cycle</a>
                   </li>
-                  <li>
+                  <li id="a4">
                     <a onclick="shipment()" class="text-light text-decoration-none">
                       <i class="bi bi-truck" style="font-size: 20px;">&nbsp;&nbsp;</i>Shipping Integration</a>
                   </li>
-                  <li>
+                  <li id="a5">
                     <a onclick="order()" class="text-light text-decoration-none">
                       <i class="bi bi-bag-fill" style="font-size: 20px;">&nbsp;&nbsp;</i>Orders</a>
                   </li>
@@ -212,17 +209,18 @@
         <!-- Dashboard-->
         <div id="d_board">
           <div class="row justify-content-evenly mt-3 roadm p-1">
-            {%for (id,file_naam,file_desc,x) in thambu%}
+            {%for (id,file_naam,file_desc,x,y) in thambu%}
             <div class="col">
-              <a href="/dashboardbutton/{{id}}" class="btn btn-dark">{{file_desc}}</a>
+            
+              <a href="/dashboardbutton/{{id}}" id="abc{{id}}" class="btn text-light border-dark" style ="background-color: #0e223d; "><span class="xyzabc" id="uzv{{id}}" >{{file_desc}}</span>  <i class="{{y}}" id="uz{{id}}"></i></a>
             </div>
             {%endfor%}
           </div>
           <div class="row justify-content-evenly mt-2">
-            <div class="col-5 border border-dark scr" style="height: 70vh;">
+            <div class="col-4 scr" style="height: 70vh;">
               <canvas id="myChart"></canvas>
             </div>
-            <div class="col-7 border border-dark " style="height: 70vh;">
+            <div class="col-8 " style="height: 70vh;">
               <div class="text-end p-1" style="height: 10vh;">
                 <a href='../static/files/{{fn}}' download='{{f}}' class="btn btn-outline-dark">Export</a>
               </div>
@@ -283,7 +281,7 @@
         <!-- END dashboard-->
 
         <!--Recipients -->
-        <div id="reci">
+        <div id="reci" >
           <section class="au-breadcrumb m-t-75">
             <div class="section__content section__content--p30">
               <div class="container-fluid">
@@ -298,7 +296,7 @@
           </section>
 
 
-          <section class="au-breadcrumb m-t-75 roadmap">
+          <section class="au-breadcrumb m-t-75 roadmap" >
             <div class="section__content section__content--p30 ">
               <div class="container-fluid">
                 <div class="row">
@@ -385,6 +383,22 @@
                 </div>
                 <div class="modal-body">
                   <form action="{{url_for('new_emp')}}" method="post">
+                    <div class="btn-group">
+
+                      <label for="GiftCycle">Choose A Giftcycle:</label>
+
+                      <select name="GiftCyclefc" id="GiftCycle">
+                        {%for (id,gfcycledesc,giftdesc,startd,endd)in gcycle %}
+                        
+                        <option value="{{id}}">{{id}}({{gfcycledesc}})</option>
+                        {%endfor%}
+
+                      </select>
+
+                    </div>
+                    <br>
+                    <br>
+
                     <div class="form-group">
                       <label for="exampleInputPassword1">Enter Employee Email</label>
                       <input type="email" name="newmail" class="form-control" id="exampleInputPassword1"
@@ -454,7 +468,7 @@
                                     </h3> -->
 
                         <div class="table-responsive  ">
-                          <table id="tables" class="display" style="width:100%">
+                          <table id="tables" class="display" style="width:100%; color: black">
                             <thead>
                               <tr>
                                 <th>Id</th>
@@ -631,7 +645,7 @@
 
 
         <!-- shipment-->
-        <div id="shipment">
+        <div id="shipment" >
           <div class="row justify-content-evenly roadm mt-1 p-2 ">
             <div class="col">
               <button class="btn btn-dark p-2" role="button" data-bs-toggle="modal" data-bs-target="#genorder"><span
@@ -649,7 +663,7 @@
             {%if messages%}
 
             {% for message in messages %}
-            {%if temp=='3'%}
+            {%if temp=='4'%}
 
             <div class="alert alert-success alert-dismissable" role="alert">
 
@@ -985,7 +999,7 @@
                               </tr>
                             </thead>
                             <tbody>
-                              {% for(id,name,email,phno,giftstatus,ono) in ordered %}
+                              {% for(id,name,email,phno,giftstatus,ono,oid) in ordered %}
                               <tr>
                                 <th>{{id}}</th>
                                 <th>{{ono}}</th>
@@ -1009,7 +1023,10 @@
 
                                 </th>
                                 <th>
-                                
+                                   
+                                  <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#updatestatus{{id}}">
+                                    <i class="bi bi-pencil-square"></i>
+                                  </button>
                                   <a href="/delet/{{id}}" class="btn  btn-xs"
                                     onclick="return confirm('Are you sure to delete?')"><i class="bi bi-trash3"
                                       title="delete"></i>
@@ -1069,7 +1086,44 @@
         <!--End Add new Gift Cycle-->
 
 
-
+           <!-- modal for update status -->
+           {% for(id,name,email,phno,giftstatus,ono,oid) in ordered %}
+         
+           <div class="modal fade" id="updatestatus{{id}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+           <form action="{{url_for('upstatus')}}" method="post">
+             <div class="modal-dialog">
+               <div class="modal-content">
+                 <div class="modal-header">
+                   <h1 class="modal-title fs-5" id="exampleModalLabel">Update Status</h1>
+                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+                 <div class="modal-body">
+                  <div class="form-group">
+                   <input type="text" name="rid" value="{{id}}" hidden>
+                   <input type="text" name="oid" value="{{oid}}" hidden>
+                   <select class="form-select" aria-label="Default select example" name="staus" onchange="updatestatus(this.value,{{id}})" >
+                     <option  selected value="D">Delivered</option>
+                     <option value="U">Undelivered</option>
+                     
+                   </select>
+                  </div>
+                  <div class="form-group"id="ststus{{id}}" style="display: none;">
+                   <div class="mb-3 mt-2">
+                     <label for="exampleInputEmail1" class="form-label">Reason</label>
+                     <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Please Enter the reason" name="reasonf" required>
+                   </div>
+                  </div>
+                 </div>
+                 <div class="modal-footer">
+                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                   <button type="submit" class="btn btn-primary">Update</button>
+                 </div>
+               </div>
+             </div>
+           </form>
+           </div>
+           {%endfor%}
+           <!-- end modal for update status -->
 
         <!-- Edit model in Recipents -->
         {%for (id,gfcycledesc,giftdesc,startd,endd)in gcycle %}
@@ -1125,7 +1179,7 @@
       </div>
 
     </div>
-    <footer class=" position-fixed bottom-0" style="width: 100%;">
+    <footer class="position-fixed bottom-0 " style="width: 100%;">
       <div class="row pb-2 text-dark mt-3" style="background-color: #f1f1f1;">
         <div class="col-12 text-center"><samp><i>
               Copyright © 2023 Datanutts IT Solutions. All Rights Reserved.</i></samp>
@@ -1202,9 +1256,13 @@
     }
 
     );
-
+    $("#uzv{{ide}}").css('color', 'black');
+    $("#abc{{ide}}").css("background","#cfe2ff");
+    $("#uz{{ide}}").css('color', 'black');
 
     jQuery(document).ready(function ($) {
+    
+  
       if (window.history && window.history.pushState) {
         window.history.pushState('forward', null, './#forward');
         $(window).on('popstate', function () {
@@ -1243,17 +1301,44 @@
       document.getElementById("g_cycle").style = "display:none";
       document.getElementById("shipment").style = "display:none";
       document.getElementById("ord").style = "display:none";
-
-
+      var dom = document.getElementById('a1');
+      dom.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      var doms = document.getElementById('a11');
+      doms.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      $("#a2").css("background","#0e223d");
+      $("#a3").css("background","#0e223d");
+      $("#a4").css("background","#0e223d");
+      $("#a5").css("background","#0e223d");
+      $("#a12").css("background","#0e223d");
+      $("#a13").css("background","#0e223d");
+      $("#a14").css("background","#0e223d");
+      $("#a15").css("background","#0e223d");
+      $("#a1").css("color","white");
+      $("#a11").css("color","white");
 
     }
     function recipent() {
       document.getElementById("d_board").style = "display:none";
-      document.getElementById("reci").style = "display:block";
+      document.getElementById("reci").style = "display:block; ";
       document.getElementById("g_cycle").style = "display:none";
 
       document.getElementById("shipment").style = "display:none";
       document.getElementById("ord").style = "display:none";
+      var dom = document.getElementById('a2');
+      dom.style.backgroundImage = 'linear-gradient(45deg,  #0e223d,#cfe2ff)';
+      var doms = document.getElementById('a12');
+      doms.style.backgroundImage = 'linear-gradient(45deg,  #0e223d,#cfe2ff)';
+      $("#a1").css("background","#0e223d");
+      $("#a3").css("background","#0e223d");
+      $("#a4").css("background","#0e223d");
+      $("#a5").css("background","#0e223d");
+      $("#a11").css("background","#0e223d");
+      $("#a13").css("background","#0e223d");
+      $("#a14").css("background","#0e223d");
+      $("#a15").css("background","#0e223d");
+      $("#a2").css("color","white");
+      $("#a12").css("color","white");
+
 
     }
     function gift_cycle() {
@@ -1262,6 +1347,18 @@
       document.getElementById("g_cycle").style = "display:block";
       document.getElementById("shipment").style = "display:none";
       document.getElementById("ord").style = "display:none";
+      var dom = document.getElementById('a3');
+      dom.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      var doms = document.getElementById('a13');
+      doms.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      $("#a2").css("background","#0e223d");
+      $("#a1").css("background","#0e223d");
+      $("#a4").css("background","#0e223d");
+      $("#a5").css("background","#0e223d");
+      $("#a12").css("background","#0e223d");
+      $("#a11").css("background","#0e223d");
+      $("#a14").css("background","#0e223d");
+      $("#a15").css("background","#0e223d");
 
 
     }
@@ -1271,6 +1368,18 @@
       document.getElementById("g_cycle").style = "display:none";
       document.getElementById("shipment").style = "display:block";
       document.getElementById("ord").style = "display:none";
+      var dom = document.getElementById('a4');
+      dom.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      var doms = document.getElementById('a14');
+      doms.style.backgroundImage = 'linear-gradient(45deg,  #0e223d,#cfe2ff)';
+      $("#a2").css("background","#0e223d");
+      $("#a3").css("background","#0e223d");
+      $("#a1").css("background","#0e223d");
+      $("#a5").css("background","#0e223d");
+      $("#a12").css("background","#0e223d");
+      $("#a13").css("background","#0e223d");
+      $("#a11").css("background","#0e223d");
+      $("#a15").css("background","#0e223d");
 
     }
      
@@ -1280,8 +1389,54 @@
       document.getElementById("g_cycle").style = "display:none";
       document.getElementById("shipment").style = "display:none";
       document.getElementById("ord").style = "display:block";
+      var dom = document.getElementById('a5');
+      dom.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      var doms = document.getElementById('a15');
+      doms.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      $("#a2").css("background","#0e223d");
+      $("#a3").css("background","#0e223d");
+      $("#a4").css("background","#0e223d");
+      $("#a1").css("background","#0e223d");
+      $("#a12").css("background","#0e223d");
+      $("#a13").css("background","#0e223d");
+      $("#a14").css("background","#0e223d");
+      $("#a11").css("background","#0e223d");
+    }
+
+    function updatestatus(sta,id){
+      if (sta=='U'){
+       document.getElementById('ststus'+id).style="display:block";
+      }
+      else{
+       document.getElementById('ststus'+id).style="display:none";
+
+      }
+
     }
  
+  </script>
+  <script>
+    const mediaQuery = window.matchMedia('(max-width: 790px)');
+const footer = document.querySelector('footer');
+const fd= document.querySelectorAll('.xyzabc');
+function handleTabletChange(e) {
+  for (let i=0;i<fd.length;i++){
+    if (e.matches) {
+      footer.classList.remove('position-fixed','bottom-0');
+      footer.classList.add('sticky-bottom','bottom-0');
+      fd[i].classList.add('d-none');
+    } else {
+      footer.classList.remove('sticky-bottom','bottom-0')
+      fd[i].classList.remove('d-none','bottom-0');
+      footer.classList.add('position-fixed','bottom-0');
+    }
+  }
+  
+}
+
+mediaQuery.addListener(handleTabletChange);
+handleTabletChange(mediaQuery);
+
   </script>
 </body>
 
