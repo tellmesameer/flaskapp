@@ -1,4 +1,5 @@
 {
     "appService.defaultWebAppToDeploy": "/subscriptions/20a64668-3cd2-4ac1-b865-edab1aa57899/resourceGroups/Devteam/providers/Microsoft.Web/sites/erewardsportal",
-    "appService.deploySubpath": "."
+    "appService.deploySubpath": ".",
+    "python.analysis.typeCheckingMode": "basic"
 }
