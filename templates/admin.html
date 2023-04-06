@@ -144,10 +144,35 @@
         <div class="theme row">
           <div class="col-12 py-3">
             <h4 class="mx-auto text-center text-light">
-              <span class="float-end"><button class="btn btn-outline-light ms-2 d-block d-lg-none"
+  
+              <span class="float-end">
+                <button class="btn btn-outline-light ms-2 d-block d-lg-none"
                   data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
                   <i class="bi bi-list"></i></button></span>
               <span class="float-end me-2"><i class="bi bi-gift"></i></span>
+
+              <span class="float-end me-3">         
+                 <div class="btn-group">
+                  <form id="yrs" action="{{url_for('change_giftcycle')}}" method="post">
+
+                <select name="GiftCyclefc"onchange="yrss();" id="GiftCycle" style="background-color: rgb(207, 226, 255); font-size: 15px; ;">
+  
+                  <option value="2161"> All GiftCycles</option>
+                  {%for (id,gfcycledesc,giftdesc,startd,endd)in gcycle %}
+                  <option value="{{id}}"
+                  
+                  {%if(id)==(lvs)%}
+                  selected
+                  {%endif%}
+                   
+                      > {{id}}({{gfcycledesc}})</option>
+                  {%endfor%}
+                </select>
+              </form>
+              </div></span>
+
+
+
             </h4>
           </div>
         </div>
@@ -232,6 +257,7 @@
                       <th>OrderNumber</th>
                       <th>Name</th>
                       <th>Email</th>
+                      <th>Gift Cycle</th>
                       <th>DeliveryURL</th>
                       <th>ShippingDate</th>
                       {%if(ide==5)%}
@@ -241,11 +267,12 @@
                   </thead>
                   <tbody>
                     {%if(ide!=5)%}
-                    {%for (OrderNumber,Name,Email,DeliveryURL,ShippingDat) in toos%}
+                    {%for (OrderNumber,Name,Email,gfc,DeliveryURL,ShippingDat) in toos%}
                     <tr>
                       <td>{{OrderNumber}}</td>
                       <td>{{Name}}</td>
                       <td>{{Email}}</td>
+                      <td>{{gfc}}</td>
                       <td>{%if(DeliveryURL)==None%}
                         Url Is not genrated
                         {%else%}
@@ -256,11 +283,12 @@
                     </tr>
                     {%endfor%}
                     {%else%}
-                    {%for (OrderNumber,Name,Email,DeliveryURL,ShippingDat,Reason) in toos%}
+                    {%for (OrderNumber,Name,Email,gfc,DeliveryURL,ShippingDat,Reason) in toos%}
                     <tr>
                       <td>{{OrderNumber}}</td>
                       <td>{{Name}}</td>
                       <td>{{Email}}</td>
+                      <td>{{gfc}}</td>
                       <td>{%if(DeliveryURL)==None%}
                         Url Is not genrated
                         {%else%}
@@ -473,17 +501,19 @@
                                 <th>Id</th>
                                 <th>Name</th>
                                 <th>Email</th>
+                                <th>GiftCycleId</th>
                                 <th>Phone Number</th>
                                 <th>Gift Status</th>
                                 <th></th>
                               </tr>
                             </thead>
                             <tbody>
-                              {% for(id,name,email,phno,giftstatus) in resi %}
+                              {% for(id,name,email,ad,phno,giftstatus) in resi %}
                               <tr>
                                 <th>{{id}}</th>
                                 <th>{{name}}</th>
                                 <th>{{email}}</th>
+                                <th>{{ad}}</th>
                                 <th>{{phno}}</th>
                                 <th>{% if(giftstatus=='N') %}
                                   Not Ordered
@@ -1240,6 +1270,13 @@
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
     crossorigin="anonymous"></script>
   <script>
+
+    function yrss()
+    {
+    document.getElementById("yrs").submit();
+  }
+
+
     $(document).ready(function () {
       $('#news').DataTable();
     });

@@ -1,2 +1,3 @@
-OrderNumber,Name,Email,DeliveryURL,ShippingDate,reason
-O#-01-0002,atul,xyz@gmail.com,https://www.google.com/,2023-03-14,Customer not available
+OrderNumber,Name,Email,GiftCycleId,DeliveryURL,ShippingDate,reason
+O#-01-0002,atul,xyz@gmail.com,1,https://www.google.com/,2023-03-14,Customer not available
+O#-01-0014,Aman,amandubey6393@gmail.com,1,,,Phone is Unreachable
