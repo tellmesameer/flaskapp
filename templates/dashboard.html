@@ -40,7 +40,7 @@
   <div class="container-fluid" >
     <!-- MENU SIDEBAR For Desktop-->
     <div class="row">
-      <div class=" col-lg-3 d-lg-block d-none z-1 "
+      <div class=" col-lg-2 d-lg-block d-none z-1 "
         style="background-color: #0e223d; position: relative; height: 100vh;">
         <div class="logo" style="background-color: #0e223d;">
           <h4 style="color: antiquewhite;" class="text-light text-center mt-2">Rewards Page</h4>
@@ -55,39 +55,39 @@
             </div>
             <h3 class="name text-light">{{naam}}</h3>
             <!-- <h4 class="name text-light">{{mail}}</h4> -->
-            <a href="{{url_for('logout')}}" class=" text-light " style="background-color: #0e223d; border:none;">Sign
+            <a href="{{url_for('logout')}}" class=" text-light text-decoration-none" style="background-color: #0e223d; border:none;">Sign
               out
             </a>
 
           </div>
           <nav class="navbar-sidebar2">
             <ul class="list-unstyled navbar__list">
-              <li class="">
+              <li class="" id="a1">
 
-                <a onclick="dashboard()" class=" text-decoration-none" id="dash">
+                <a onclick="dashboard()" class=" text-decoration-none text-light" id="dash">
                   <i class="bi bi-speedometer2  " style="font-size: 20px;">&nbsp;&nbsp;</i>Dashboard</a>
 
               </li>
 
 
               {% if carts=='N' %}
-              <li>
-                <a onclick="gift()" class=" text-light text-decoration-none" id="gift">
+              <li id="a2">
+                <a onclick="gift()" class=" text-decoration-none text-light" id="gift">
                   <i class="bi bi-gift" style="font-size: 20px;">&nbsp;&nbsp;</i>Gift</a>
               </li>
               {%endif%}
               {% if carts=='C' %}
 
-              <li>
-                <a onclick="cart()" class="text-light text-decoration-none" id="cart">
+              <li id="a3">
+                <a onclick="cart()" class=" text-decoration-none text-light" id="cart">
                   <i class="bi bi-cart" style="font-size: 20px;">&nbsp;&nbsp;</i>Cart</a>
 
               </li>
 
               {%endif%}
               {% if carts=='A' %}
-              <li>
-                <a onclick="shipment()" class="  text-decoration-none" id="ship">
+              <li id="a4">
+                <a onclick="shipment()" class="  text-decoration-none text-light" id="ship">
                   <i class="bi bi-truck" style="font-size: 20px;">&nbsp;&nbsp;</i>Order Summary</a>
 
               </li>
@@ -97,7 +97,7 @@
         </div>
       </div>
       <!-- END MENU SIDEBAR-->
-      <div class="col-lg-9">
+      <div class="col-lg-10">
 
         <!-- HEADER DESKTOP-->
         <div class="theme row ">
@@ -140,30 +140,30 @@
               </div>
               <nav class="navbar-sidebar2">
                 <ul class="list-unstyled navbar__list">
-                  <li class="active">
+                  <li class="active" id="a11">
 
-                    <a onclick="dashboard()" class=" text-decoration-none" id="dash1">
+                    <a onclick="dashboard()" class=" text-decoration-none text-light" id="dash1">
                       <i class="bi bi-speedometer2  " style="font-size: 20px;">&nbsp;&nbsp;</i>Dashboard</a>
 
                   </li>
 
 
                   {% if carts=='N' %}
-                  <li>
+                  <li id="a12">
                     <a onclick="gift()" class=" text-light text-decoration-none" id="gift1">
                       <i class="bi bi-gift" style="font-size: 20px;">&nbsp;&nbsp;</i>Gift</a>
                   </li>
                   {%endif%}
                   {% if carts=='C' %}
-                  <li>
+                  <li id="a13">
                     <a onclick="cart()" class="text-light text-decoration-none" id="cart1">
                       <i class="bi bi-cart" style="font-size: 20px;">&nbsp;&nbsp;</i>Cart</a>
 
                   </li>
                   {%endif%}
                   {% if carts=='A' %}
-                  <li>
-                    <a onclick="shipment()" class="  text-decoration-none" id="ship1">
+                  <li id="a14">
+                    <a onclick="shipment()" class="  text-decoration-none text-light" id="ship1">
                       <i class="bi bi-truck" style="font-size: 20px;">&nbsp;&nbsp;</i>Order Summary</a>
 
                   </li>
@@ -493,24 +493,24 @@
                 <form class="row g-3" action="{{url_for('confirm')}}" method="post">
                   <div class="col-md-6">
                     <label for="inputEmail4" class="form-label">Name</label>
-                    <input type="text" class="form-control"  name="name" required>
+                    <input type="text" class="form-control"  name="name"  pattern="^[A-Za-z -]+$" title="Name Should BE In Characters" required>
                   </div>
                   <div class="col-md-6">
                     <label for="inputPassword4" class="form-label">Phone no</label>
                     <input type="text" class="form-control"  name="phno" minlength="10"
-                      maxlength="10" placeholder="+91" required>
+                      maxlength="10" pattern="[0-9]{10}" title="Phone no must contains digits only" placeholder="+91" required>
                   </div>
                   <div class="col-md-6">
                     <label for="inputZip" class="form-label">Zip</label>
-                    <input type="text" inputmode="numeric" class="form-control" id="pincode" name="pincode" pattern="[0-9]{6}" minlength="6" maxlength="6" required>
+                    <input type="text" inputmode="numeric" class="form-control" id="pincode" name="pincode" pattern="[0-9]{6}"title="Pin Code Must Be In Numeric" minlength="6" maxlength="6" required>
                   </div>
                   <div class="col-md-6">
                     <label for="inputCity" class="form-label">Country</label>
-                    <input type="text" class="form-control" id="country" name="country" readonly>
+                    <input type="text" class="form-control" id="country" name="country" pattern="^[A-Za-z -]+$" title="Special characteres are not allowed " required >
                   </div>
                   <div class="col-md-6">
                     <label for="inputState" class="form-label">State</label>
-                    <input type="text" class="form-control" id="state" name="state" readonly >
+                    <input type="text" class="form-control" id="state" name="state" pattern="^[A-Za-z -]+$"  title="Special characteres are not allowed only Spaces are allowed" required  >
                     <!-- <select id="inputState" class="form-select" name="state">
                       <option value="">Select state</option>
                       <option value="AN">Andaman and Nicobar Islands</option>
@@ -555,11 +555,11 @@
                   </div>
                   <div class="col-md-6">
                     <label for="inputCity" class="form-label">District</label>
-                    <input type="text" class="form-control" id="city" name="city" readonly>
+                    <input type="text" class="form-control" id="city" name="city" pattern="^[A-Za-z -]+$" title="Special characteres are not allowed " required >
                   </div>
                   <div class="col-12">
                     <label for="inputAddress" class="form-label">Address</label>
-                    <input type="text" class="form-control" id="inputAddress" name="address" placeholder="1234 Main St"
+                    <input type="text" class="form-control" id="inputAddress" name="address"  pattern="[a-zA-Z0-9\s]+" title="Special characteres are not allowed only Spaces are allowed" placeholder="1234 Main St"
                       required>
                   </div>
 
@@ -665,24 +665,24 @@
                 <form class="row g-3" action="{{url_for('save')}}" method="post">
                   <div class="col-md-6">
                     <label for="inputEmail4" class="form-label">Name</label>
-                    <input type="text" class="form-control"  name="name" required>
+                    <input type="text" class="form-control"  name="name" title="Name Should BE In Characters" pattern="^[A-Za-z -]+$" required>
                   </div>
                   <div class="col-md-6">
                     <label for="inputPassword4" class="form-label">Phone no</label>
                     <input type="text" class="form-control"  name="phno" minlength="10"
-                      maxlength="10" placeholder="+91" required>
+                      maxlength="10" pattern="[0-9]{10}" title="Phone no must contains digits only" placeholder="+91" required>
                   </div>
                   <div class="col-md-6">
                     <label for="inputZip" class="form-label">Zip</label>
-                    <input type="text" inputmode="numeric" class="form-control" id="pincodes" name="pincode" pattern="[0-9]{6}" minlength="6" maxlength="6" required>
+                    <input type="text" inputmode="numeric" class="form-control" id="pincodes" name="pincode" pattern="[0-9]{6}" title="Pin code must be in digits" minlength="6" maxlength="6" required>
                   </div>
                   <div class="col-md-6">
                     <label for="inputCity" class="form-label">Country</label>
-                    <input type="text" class="form-control" id="countrys" name="country" readonly>
+                    <input type="text" class="form-control" id="countrys" name="country" pattern="^[A-Za-z -]+$" title="Special characteres are not allowed "  required>
                   </div>
                   <div class="col-md-6">
                     <label for="inputState" class="form-label">State</label>
-                    <input type="text" class="form-control" id="states" name="state" readonly >
+                    <input type="text" class="form-control" id="states" name="state" pattern="^[A-Za-z -]+$" title="Special characteres are not allowed only Spaces are allowed" required>
                     <!-- <select id="inputState" class="form-select" name="state">
                       <option value="">Select state</option>
                       <option value="AN">Andaman and Nicobar Islands</option>
@@ -727,11 +727,11 @@
                   </div>
                   <div class="col-md-6">
                     <label for="inputCity" class="form-label">District</label>
-                    <input type="text" class="form-control" id="citys" name="city" readonly>
+                    <input type="text" class="form-control" id="citys" name="city" pattern="^[A-Za-z -]+$" title="Special characteres are not allowed " required>
                   </div>
                   <div class="col-12">
                     <label for="inputAddress" class="form-label">Address</label>
-                    <input type="text" class="form-control" id="inputAddress" name="address" placeholder="1234 Main St"
+                    <input type="text" class="form-control" id="inputAddress" name="address" placeholder="1234 Main St"  pattern="[a-zA-Z0-9\s]+" title="Special characteres are not allowed only Spaces are allowed"
                       required>
                   </div>
 
@@ -781,27 +781,18 @@
       document.getElementById("shipment").style.display = "none";
       document.getElementById("gifts").style.display = "none";
 
-      document.getElementById("dash").classList.add("text-light");
-      {% if carts == 'N' %}
-      document.getElementById("gift").classList.remove("text-light");
-      {% endif %}
-      {%if carts == 'C' %}
-      document.getElementById("cart").classList.remove("text-light");
-      {% endif %}
-      {%if carts == 'A' %}
-      document.getElementById("ship").classList.remove("text-light");
-      {% endif %}
-      document.getElementById("dash1").classList.add("text-light");
-      {% if carts == 'N' %}
-      document.getElementById("gift1").classList.remove("text-light");
-      {% endif %}
-
-      {%if carts == 'C' %}
-      document.getElementById("cart1").classList.remove("text-light");
-      {% endif %}
-      {%if carts == 'C' %}
-      document.getElementById("ship1").classList.remove("text-light");
-      {% endif %}
+      var dom = document.getElementById('a1');
+      dom.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      var doms = document.getElementById('a11');
+      doms.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      $("#a2").css("background","#0e223d");
+      $("#a3").css("background","#0e223d");
+      $("#a4").css("background","#0e223d");
+      $("#a12").css("background","#0e223d");
+      $("#a13").css("background","#0e223d");
+      $("#a14").css("background","#0e223d");
+      $("#a1").css("color","white");
+      $("#a11").css("color","white");
 
 
 
@@ -811,20 +802,19 @@
       document.getElementById("d_board").style.display = "none";
       document.getElementById("addcart").style.display = "none";
       document.getElementById("shipment").style.display = "none";
+      var dom = document.getElementById('a2');
+      dom.style.backgroundImage = 'linear-gradient(45deg,  #0e223d,#cfe2ff)';
+      var doms = document.getElementById('a12');
+      doms.style.backgroundImage = 'linear-gradient(45deg,  #0e223d,#cfe2ff)';
+      $("#a1").css("background","#0e223d");
+      $("#a3").css("background","#0e223d");
+      $("#a4").css("background","#0e223d");
+      $("#a11").css("background","#0e223d");
+      $("#a13").css("background","#0e223d");
+      $("#a14").css("background","#0e223d");
+      $("#a2").css("color","white");
+      $("#a12").css("color","white");
 
-      document.getElementById("gift").classList.add("text-light");
-      {%if carts == 'C' %}
-      document.getElementById("cart").classList.remove("text-light");
-      {% endif %}
-
-      document.getElementById("dash").classList.remove("text-light");
-      document.getElementById("ship").classList.remove("text-light");
-      document.getElementById("gift1").classList.add("text-light");
-      {%if carts == 'C' %}
-      document.getElementById("cart1").classList.remove("text-light");
-      {% endif %}
-      document.getElementById("dash1").classList.remove("text-light");
-      document.getElementById("ship1").classList.remove("text-light");
 
 
     }
@@ -834,18 +824,16 @@
       document.getElementById("shipment").style.display = "none";
       document.getElementById("gifts").style.display = "none";
 
-      document.getElementById("cart").classList.add("text-light");
-      {% if carts == 'N' %}
-      document.getElementById("gift").classList.remove("text-light");
-      {% endif %}
-      document.getElementById("dash").classList.remove("text-light");
-      document.getElementById("ship").classList.remove("text-light");
-      document.getElementById("cart1").classList.add("text-light");
-      document.getElementById("dash1").classList.remove("text-light");
-      document.getElementById("ship1").classList.remove("text-light");
-      {% if carts == 'N' %}
-      document.getElementById("gift1").classList.remove("text-light");
-      {% endif %}
+      var dom = document.getElementById('a3');
+      dom.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      var doms = document.getElementById('a13');
+      doms.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      $("#a2").css("background","#0e223d");
+      $("#a1").css("background","#0e223d");
+      $("#a4").css("background","#0e223d");
+      $("#a12").css("background","#0e223d");
+      $("#a11").css("background","#0e223d");
+      $("#a14").css("background","#0e223d");
 
 
     }
@@ -856,23 +844,18 @@
       document.getElementById("addcart").style.display = "none";
       document.getElementById("gifts").style.display = "none";
 
-      document.getElementById("ship").classList.add("text-light");
-      {%if carts == 'C' %}
-      document.getElementById("cart").classList.remove("text-light");
-      {% endif %}
-      document.getElementById("dash").classList.remove("text-light");
-      {% if carts == 'N' %}
-      document.getElementById("gift").classList.remove("text-light");
-      {% endif %}
-      document.getElementById("ship1").classList.add("text-light");
-      {%if carts == 'C' %}
-      document.getElementById("cart1").classList.remove("text-light");
-      {% endif %}
-      document.getElementById("dash1").classList.remove("text-light");
-      {% if carts == 'N' %}
-      document.getElementById("gift1").classList.remove("text-light");
-      {% endif %}
-
+      var dom = document.getElementById('a4');
+      dom.style.backgroundImage = 'linear-gradient(45deg, #0e223d,#cfe2ff)';
+      var doms = document.getElementById('a14');
+      doms.style.backgroundImage = 'linear-gradient(45deg,  #0e223d,#cfe2ff)';
+      $("#a2").css("background","#0e223d");
+      $("#a3").css("background","#0e223d");
+      $("#a1").css("background","#0e223d");
+      $("#a5").css("background","#0e223d");
+      $("#a12").css("background","#0e223d");
+      $("#a13").css("background","#0e223d");
+      $("#a11").css("background","#0e223d");
+      $("#a15").css("background","#0e223d");
 
     }
   </script>
