@@ -61,7 +61,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 global lvs
 lvs=214
 
-@app.route('/')
+@app.route('/') 
 def index():
     try:
             if session['loggedin'] == True:
@@ -1094,10 +1094,16 @@ def ship_inti():
     temp_admin = '4'
     usr='1'
     try:
-        getdatacmd = 'SELECT [OrderId],[OrderNumber],[OrderDate],[RecipientId],[GiftCycleId],[ShippingAddress],[ShippingCity],[ShippingState],[ShippingZIP],[ShippingCountry],[DeliveryURL],[DockerNumber],[DockerDateUpdated],[ShippingDate],[CreateUserId],[UpdateUserId],[CreateDate],[UpdateDate] FROM [dbo].[Order] where [OrderNumber] IS NOT NULL AND [DeliveryURL] IS NULL'
+        if(lvs==214):
+            getdatacmd = 'SELECT [OrderId],[OrderNumber],[OrderDate],[RecipientId],[GiftCycleId],[ShippingAddress],[ShippingCity],[ShippingState],[ShippingZIP],[ShippingCountry],[DeliveryURL],[DockerNumber],[DockerDateUpdated],[ShippingDate],[CreateUserId],[UpdateUserId],[CreateDate],[UpdateDate] FROM [dbo].[Order] where [OrderNumber] IS NOT NULL AND [DeliveryURL] IS NULL'
+        else:
+            getdatacmd = 'SELECT [OrderId],[OrderNumber],[OrderDate],[RecipientId],[GiftCycleId],[ShippingAddress],[ShippingCity],[ShippingState],[ShippingZIP],[ShippingCountry],[DeliveryURL],[DockerNumber],[DockerDateUpdated],[ShippingDate],[CreateUserId],[UpdateUserId],[CreateDate],[UpdateDate] FROM [dbo].[Order] where [OrderNumber] IS NOT NULL AND [DeliveryURL] IS NULL AND [GiftCycleId]=?'
         filename = 'static/files/shipment_pending_delivery.csv'
         realname = 'shipment_pending_delivery.csv'
-        sql_query = pd.read_sql_query(getdatacmd, mydb)
+        if(lvs==214):
+            sql_query = pd.read_sql_query(getdatacmd, mydb)
+        else:
+            sql_query = pd.read_sql_query(getdatacmd, mydb,params = [lvs])
         df = pd.DataFrame(sql_query)
         df.to_csv(filename, index=False)
     except:
@@ -1106,7 +1112,10 @@ def ship_inti():
             mycursor.execute(
                 '''Select [file_naam] ,[file_desc] from [dbo].[csv_data] where [id]=%d''' % (6,))
             csvname = mycursor.fetchall()
-            mycursor.execute(getdatacmd)
+            if(lvs==214):
+                mycursor.execute(getdatacmd)
+            else:
+                mycursor.execute(getdatacmd,(lvs,))        
             held = mycursor.fetchall()
             if(lvs==214):
                 mycursor.execute(
@@ -1136,7 +1145,10 @@ def ship_inti():
     mycursor.execute(
         '''Select [file_naam] ,[file_desc] from [dbo].[csv_data] where [id]=%d''' % (6,))
     csvname = mycursor.fetchall()
-    mycursor.execute(getdatacmd)
+    if(lvs==214):
+                mycursor.execute(getdatacmd)
+    else:
+                mycursor.execute(getdatacmd,(lvs,))        
     held = mycursor.fetchall()
     if(lvs==214):
                 mycursor.execute(
