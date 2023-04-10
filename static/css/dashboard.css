@@ -17,7 +17,15 @@ appearance: none;
 *{
     margin: 0;
     padding: 0;
+    
 }
+
+body::-webkit-scrollbar {
+    display: none;
+  }
+#msp::-webkit-scrollbar{
+    display: none;
+  }
 
 .page-wrapper{
      overflow: hidden;
