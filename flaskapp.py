@@ -37,12 +37,21 @@ except pyodbc.Error as drror:
         else:
             print('Add Your Ip first .')
 
-
 # Starting cursor to fetch all the details
 mycursor = mydb.cursor()
-mycursor.execute("SELECT * FROM [dbo].[User]")
 mycursor.execute("SELECT [Email],[PhoneNumber] FROM [dbo].[Recipient]")
 res_result = mycursor.fetchall()
+mycursor.execute("SELECT [query_used] FROM [dbo].[csv_data] where [id]=1")
+tot=mycursor.fetchall()
+global total_used_query
+global total_used_query_forall
+for (i,) in tot:
+    total_used_query=i
+    total_used_query_forall=i[:-19]
+    
+     
+
+
 
 
 # Upload folder
@@ -50,7 +59,7 @@ UPLOAD_FOLDER = 'static/files'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 global lvs
-lvs=1
+lvs=214
 
 @app.route('/')
 def index():
@@ -65,26 +74,41 @@ def index():
                         counts = []
                         for (x,) in count_query:
                             y = str(x)
-                            if (y != 'None'):
-                                mycursor.execute(y,(lvs))
-                                count = mycursor.fetchall()
-                                for (c,) in count:
-                                    print(c)
-                                    counts.append(c)
+                            if(lvs==214):
+                                if (y != 'None'):
+                                    z=y[:-19]
+                                    mycursor.execute(z)
+                                    count = mycursor.fetchall()
+                                    for (c,) in count:
+                                        counts.append(c)
+                                else:
+                                    print(counts)
                             else:
-                                print(counts)   
+                                if (y != 'None'):
+                                    mycursor.execute(y,(lvs))
+                                    count = mycursor.fetchall()
+                                    for (c,) in count:
+                                        counts.append(c)
+                                else:
+                                    print(counts) 
                         mycursor.execute(
                                 '''SELECT [file_desc] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
                         mys = mycursor.fetchall()
                         # copy past yha s
-                        mycursor.execute(
-                                    ''' select [OrderNumber],[Name],[Email],[GiftCycleId],[DeliveryURL],[ShippingDate] from [dbo].[Order] LEFT JOIN [dbo].[Recipient]ON [dbo].[Order].RecipientId = [dbo].[Recipient].RecipientId where OrderNumber is not null and [DeliveryURL] is  null and [ShippingDate] is  null''')
+                        if(lvs==214):
+                            mycursor.execute(total_used_query_forall)
+                        else:
+                            mycursor.execute(total_used_query,(lvs,))
                         totalorders = mycursor.fetchall()
                         mycursor.execute(
                                     '''SELECT  [id],[file_naam],[file_desc],[query_used],[icons] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
                         bus = mycursor.fetchall()
-                        mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+                        if(lvs==214):
+                            mycursor.execute(
+                                                '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+                        else:
+                            mycursor.execute(
+                                                '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
                         resi = mycursor.fetchall()
                         mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
                         ordered=mycursor.fetchall()
@@ -96,7 +120,7 @@ def index():
                             session.clear()
                             flash('Unexpected error occurred in databse ')
                             return render_template('newlogin.html')
-                    return render_template('admin.html',lvs=2161, mail='admin@abc.com', resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
+                    return render_template('admin.html',lvs=214, mail='admin@abc.com', resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
                 else:
                     
                             mycursor.execute('''SELECT  [RecipientId],[Name],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] where [Email]='%s' ''' % (mail))
@@ -151,14 +175,20 @@ def goe():
                         mycursor.execute(
                                 '''SELECT [file_desc] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
                         mys = mycursor.fetchall()
-                        mycursor.execute(
-                                    ''' select [OrderNumber],[Name],[Email],[GiftCycleId],[DeliveryURL],[ShippingDate] from [dbo].[Order] LEFT JOIN [dbo].[Recipient] ON [dbo].[Order].RecipientId = [dbo].[Recipient].RecipientId where OrderNumber is not null ''')
+                        if(lvs==214):
+                            mycursor.execute(total_used_query_forall)
+                        else:
+                            mycursor.execute(total_used_query,(lvs,))
                         totalorders = mycursor.fetchall()
                         mycursor.execute(
                                     '''SELECT  [id],[file_naam],[file_desc],[query_used],[icons] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
                         bus = mycursor.fetchall()
-                        mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+                        if(lvs==214):
+                            mycursor.execute(
+                                                '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+                        else:
+                            mycursor.execute(
+                                                '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
                         resi = mycursor.fetchall()
                         mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
                         ordered=mycursor.fetchall()
@@ -170,7 +200,7 @@ def goe():
                             session.clear()
                             flash('Unexpected error occurred in databse ')
                             return render_template('newlogin.html')
-                    return render_template('admin.html',lvs=2161, mail='admin@abc.com', resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
+                    return render_template('admin.html',lvs=214, mail='admin@abc.com', resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
                 else:
                     
                             mycursor.execute('''SELECT  [RecipientId],[Name],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] where [Email]='%s' ''' % (mail))
@@ -275,18 +305,36 @@ def change_giftcycle():
         counts = []
         for (x,) in count_query:
             y = str(x)
-            if (y != 'None'):
-                mycursor.execute(y,(lvs))
-                count = mycursor.fetchall()
-                for (c,) in count:
-                    print(c)
-                    counts.append(c)
+            if(lvs==214):
+                if (y != 'None'):
+                    z=y[:-19]
+                    mycursor.execute(z)
+                    count = mycursor.fetchall()
+                    for (c,) in count:
+                        counts.append(c)
+                else:
+                    print(counts)
             else:
-                print(counts)   
-        mycursor.execute(''' select [OrderNumber],[Name],[Email],[GiftCycleId],[DeliveryURL],[ShippingDate] from [dbo].[Order] LEFT JOIN [dbo].[Recipient] ON [dbo].[Order].RecipientId = [dbo].[Recipient].RecipientId where OrderNumber is not null and [GiftCycleId]=? ''',(lvs,))
+                if (y != 'None'):
+                    mycursor.execute(y,(lvs))
+                    count = mycursor.fetchall()
+                    for (c,) in count:
+                        counts.append(c)
+                else:
+                    print(counts)
+            
+            
+        if(lvs==214):
+            mycursor.execute(total_used_query_forall)
+        else:
+                        mycursor.execute(total_used_query,(lvs,))
         totalorders = mycursor.fetchall()
-        mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+        if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+        else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
         resi = mycursor.fetchall()
         mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
         ordered=mycursor.fetchall()
@@ -302,7 +350,19 @@ def change_giftcycle():
             return render_template('newlogin.html')
         flash('Unexpected error occurred in databse ')
         return render_template('newlogin.html')
-    return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
+    try:
+        return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
+    except:
+        try:
+            session.pop('loggedin', None)
+            session.pop('mail', None)
+            session.clear()
+        except:
+            flash('Unexpected error occurred in databse ')
+            return render_template('newlogin.html')
+        flash('Unexpected error occurred in databse ')
+        return render_template('newlogin.html')
+        
 
 
 
@@ -343,25 +403,30 @@ def rewards():
                     global dta
                     temp_admin = 5
                     try:
-                        mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+                        if(lvs==214):
+                            mycursor.execute(
+                                                '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+                        else:
+                            mycursor.execute(
+                                                '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
                         resi = mycursor.fetchall()
                         mycursor.execute(
                             '''SELECT  [id],[file_naam],[file_desc],[query_used],[icons] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
                         bus = mycursor.fetchall()
                         mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
                         gfcycle = mycursor.fetchall()
-                        mycursor.execute(
-                            ''' select [OrderNumber],[Name],[Email],[GiftCycleId],[DeliveryURL],[ShippingDate] from [dbo].[Order] LEFT JOIN [dbo].[Recipient] ON [dbo].[Order].RecipientId = [dbo].[Recipient].RecipientId where OrderNumber is not null ''')
+                        if(lvs==214):
+                            mycursor.execute(total_used_query_forall)
+                        else:
+                            mycursor.execute(total_used_query,(lvs,))
                         totalorders = mycursor.fetchall()
                         counts = []
                         mycursor.execute(
                             '''SELECT [query_used_count] FROM [dbo].[csv_data] where [id] !=%d  order by [id]''' % (6,))
                         count_query = mycursor.fetchall()
 
-                        mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+                        mycursor.execute(''' select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
                         ordered=mycursor.fetchall()
-                        print(count_query)
                     except Exception as e:      
                         session.pop('loggedin', None)
                         session.pop('mail', None)
@@ -371,14 +436,23 @@ def rewards():
                         return render_template('newlogin.html')
                     for (x,) in count_query:
                         y = str(x)
-                        if (y != 'None'):
-                            mycursor.execute(y,(lvs))
-                            count = mycursor.fetchall()
-                            for (c,) in count:
-                                print(c)
-                                counts.append(c)
+                        if(lvs==214):
+                            if (y != 'None'):
+                                z=y[:-19]
+                                mycursor.execute(z)
+                                count = mycursor.fetchall()
+                                for (c,) in count:
+                                    counts.append(c)
+                            else:
+                                print(counts)
                         else:
-                            print(counts)     
+                            if (y != 'None'):
+                                mycursor.execute(y,(lvs))
+                                count = mycursor.fetchall()
+                                for (c,) in count:
+                                    counts.append(c)
+                            else:
+                                print(counts)   
                     x = 'select [OrderNumber],[Name],[Email],[DeliveryURL],[ShippingDate] from [dbo].[Order] LEFT JOIN [dbo].[Recipient]ON [dbo].[Order].RecipientId = [dbo].[Recipient].RecipientId where OrderNumber is not null'
                     filename = 'static/files/total_orders.csv'
                     realname = 'total_orders.csv'
@@ -395,7 +469,6 @@ def rewards():
                         return render_template('newlogin.html')
                         
             except Exception as e:
-                print(e)
                 flash(f'Session has been terminated. So login again {e}')
                 return render_template('newlogin.html')
         else:
@@ -419,7 +492,11 @@ def logout():
 def dashboardbutton(id_data):
     global realname
     temp_admin = 5
-    mycursor.execute(
+    if(lvs==214):
+        mycursor.execute(
+                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+    else:
+         mycursor.execute(
                             '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
     resi = mycursor.fetchall()
     mycursor.execute(
@@ -437,7 +514,11 @@ def dashboardbutton(id_data):
     for (a, x,) in lhs:
         y = str(x)
         z = str(a)
-        mycursor.execute(x,(lvs,))
+        if(lvs==214):
+            cscv=x[:-19]
+            mycursor.execute(cscv)
+        else:
+            mycursor.execute(x,(lvs,))
         totalorders = mycursor.fetchall()
         filename = 'static/files/'+z
         realname = z
@@ -456,14 +537,23 @@ def dashboardbutton(id_data):
         count_query = mycursor.fetchall()
     for (x,) in count_query:
         y = str(x)
-        if (y != 'None'):
-            mycursor.execute(y,(lvs))
-            count = mycursor.fetchall()
-            for (c,) in count:
-                print(c)
-                counts.append(c)
+        if(lvs==214):
+                if (y != 'None'):
+                    z=y[:-19]
+                    mycursor.execute(z)
+                    count = mycursor.fetchall()
+                    for (c,) in count:
+                        counts.append(c)
+                else:
+                    print(counts)
         else:
-            print(counts)        
+                if (y != 'None'):
+                    mycursor.execute(y,(lvs))
+                    count = mycursor.fetchall()
+                    for (c,) in count:
+                        counts.append(c)
+                else:
+                    print(counts)       
     if (id_data == 1):
         mycursor.execute(
             '''SELECT [file_desc] FROM [dbo].[csv_data] where [id] !=%d order by [id]''' % (6,))
@@ -495,8 +585,11 @@ def confirm():
     state = request.form['state']
     city = request.form['city']
     pincode = request.form['pincode']
-    mycursor.execute(''' insert into [dbo].[order] ([RecipientId],[GiftCycleId], [ShippingAddress]  ,[ShippingCity]  ,[ShippingState],[ShippingZIP]  ,[ShippingCountry]) values('%s',1,'%s','%s','%s','%s','%s') ''' % (
-        resid, address, city, state, pincode, country,))
+    mycursor.execute(''' select [GiftCycleId] from [dbo].[User] where [UserEmail]='%s' '''%(mail))
+    fps=mycursor.fetchall()
+    for(x,) in fps:
+        mycursor.execute(''' insert into [dbo].[order] ([RecipientId],[GiftCycleId], [ShippingAddress]  ,[ShippingCity]  ,[ShippingState],[ShippingZIP]  ,[ShippingCountry]) values('%s',%d,'%s','%s','%s','%s','%s') ''' % (
+            resid,x, address, city, state, pincode, country,))
     try:
         mycursor.execute(
             '''Update [dbo].[Recipient] set [RecipientGiftStatus]='A' where [RecipientId]='%s' ''' % (resid,))
@@ -1015,8 +1108,12 @@ def ship_inti():
             csvname = mycursor.fetchall()
             mycursor.execute(getdatacmd)
             held = mycursor.fetchall()
-            mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+            if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+            else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
@@ -1041,8 +1138,12 @@ def ship_inti():
     csvname = mycursor.fetchall()
     mycursor.execute(getdatacmd)
     held = mycursor.fetchall()
-    mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+    if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+    else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
@@ -1094,8 +1195,12 @@ def dele(id_data):
         mydb.commit()
     except:
         try:
-            mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+            if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+            else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
@@ -1115,8 +1220,12 @@ def dele(id_data):
             flash('Unexpected error occurred in databse ')
             return render_template('newlogin.html')
         
-    mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+    if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+    else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
@@ -1138,8 +1247,12 @@ def delete(id_data):
         mydb.commit()
     except:
         try:
-            mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+            if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+            else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
@@ -1158,8 +1271,12 @@ def delete(id_data):
                 return render_template('newlogin.html')
             flash('Unexpected error occurred in databse ')
             return render_template('newlogin.html')
-    mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+    if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+    else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
@@ -1181,8 +1298,12 @@ def delet(id_data):
         mydb.commit()
     except:
         try:
-            mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+            if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+            else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
@@ -1201,8 +1322,12 @@ def delet(id_data):
                 return render_template('newlogin.html')
             flash('Unexpected error occurred in databse ')
             return render_template('newlogin.html')
-    mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+    if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+    else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
@@ -1238,8 +1363,12 @@ def upstatus():
 
     except:
         try:
-            mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+            if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+            else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
@@ -1258,8 +1387,12 @@ def upstatus():
                 return render_template('newlogin.html')
             flash('Unexpected error occurred in databse ')
             return render_template('newlogin.html')
-    mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+    if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+    else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
@@ -1276,8 +1409,12 @@ def csvupdate():
     mycursor.execute(
         '''Select [file_naam] ,[file_desc] from [dbo].[csv_data] where [id]=%d''' % (6,))
     csvname = mycursor.fetchall()
-    mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+    if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+    else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
@@ -1417,8 +1554,12 @@ def new_csv():
                 mydb.commit()
             except:
                 try:
-                    mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+                    if(lvs==214):
+                        mycursor.execute(
+                                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+                    else:
+                        mycursor.execute(
+                                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
                     resi = mycursor.fetchall()
                     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
                     gfcycle = mycursor.fetchall()
@@ -1435,8 +1576,12 @@ def new_csv():
                     return render_template('newlogin.html')
                 
 
-    mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+    if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+    else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
@@ -1460,8 +1605,12 @@ def newgiftcycle():
         mydb.commit()
     except:
         try:
-            mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+            if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+            else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
@@ -1481,8 +1630,12 @@ def newgiftcycle():
             flash('Unexpected error occurred in databse ')
             return render_template('newlogin.html')
         
-    mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+    if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+    else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
@@ -1506,8 +1659,12 @@ def new_emp():
         mydb.commit() 
     except pyodbc.Error as drror:
         try:
-            mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+            if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+            else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
@@ -1529,8 +1686,12 @@ def new_emp():
                 return render_template('newlogin.html')
             flash('Unexpected error occurred in databse ')
             return render_template('newlogin.html')
-    mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+    if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+    else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
@@ -1618,8 +1779,12 @@ def update_giftcycle():
         flash('Unexpected error occurred in databse ')
         return render_template('newlogin.html')
     try:
-        mycursor.execute(
-                            '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
+        if(lvs==214):
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail]''')
+        else:
+                mycursor.execute(
+                                    '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
         resi = mycursor.fetchall()
         mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
         ordered=mycursor.fetchall()
