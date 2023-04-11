@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'erewardsportal'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3743BE89C85D483794B2D5FD7E97CD9F }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_7040EE11C9AE4AC19FA9CB8C2F0D30B4 }}
