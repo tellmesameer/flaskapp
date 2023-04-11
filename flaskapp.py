@@ -27,17 +27,22 @@ app.config["DEBUG"] = True
 
 
 # connection details for azure DB
-try:
-    mydb = pyodbc.connect(driver="ODBC Driver 18 for SQL Server",
-                        host="erewardsportal001.database.windows.net", database="giftportal",
-                        uid="dbadmin", pwd="Password@123")
-except pyodbc.Error as drror:
-        if drror.args[0] == "42000":
-            print('Try again later because your internet is slow and the database is timed out.')
-        else:
-            print('Add Your Ip first .')
+# try:
+#     mydb = pyodbc.connect(driver="ODBC Driver 18 for SQL Server",
+#                         host="34.131.235.28", database="giftportal",
+#                         uid="sqlserver", pwd="Password@123")
+# except pyodbc.Error as drror:
+#         if drror.args[0] == "42000":
+#             print('Try again later because your internet is slow and the database is timed out.')
+#         else:
+#             print('Add Your Ip first .')
 
-# Starting cursor to fetch all the details
+
+# connection details for Google Cloud DB
+
+
+mydb = pyodbc.connect(driver='{SQL Server}', host="34.131.235.28", database="giftportal",
+                     TrustServerCertificate="true", user='sqlserver', password="Password@123")
 mycursor = mydb.cursor()
 mycursor.execute("SELECT [Email],[PhoneNumber] FROM [dbo].[Recipient]")
 res_result = mycursor.fetchall()
@@ -48,7 +53,6 @@ global total_used_query_forall
 for (i,) in tot:
     total_used_query=i
     total_used_query_forall=i[:-19]
-    
      
 
 
@@ -656,7 +660,7 @@ def save():
     pincode = request.form['pincode']
     try:
         
-        mycursor.execute(''' update [dbo].[order] set [GiftCycleId]=1 ,[ShippingAddress]='%s'  ,[ShippingCity]='%s',[ShippingState]='%s',[ShippingZIP]='%s'  ,[ShippingCountry]='%s' where [RecipientId]='%s' ''' % (
+        mycursor.execute(''' update [dbo].[order] set [ShippingAddress]='%s'  ,[ShippingCity]='%s',[ShippingState]='%s',[ShippingZIP]='%s'  ,[ShippingCountry]='%s' where [RecipientId]='%s' ''' % (
         address, city, state, pincode, country, resid,))
         mydb.commit()
     except:
@@ -753,13 +757,18 @@ def placeorder():
                 return render_template('newlogin.html')
             flash('Unexpected error occurred in databse ')
             return render_template('newlogin.html')
+    mycursor.execute('''SELECT [GiftCycleId] from [dbo].[User] where [UserEmail]='%s' '''%(mail,))
+    cc=mycursor.fetchall()
+    global gfcycle
+    for(csdd,)in cc:
+        gfcycle = csdd
     mycursor.execute(
         '''SELECT [Name],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] where [Email]='%s' ''' % (mail))
     nameph = mycursor.fetchall()
     mycursor.execute("SELECT * FROM [dbo].[GiftCycle]")
     gift = mycursor.fetchall()
     mycursor.execute(
-        '''Select  [OrderId],[OrderNumber] from [dbo].[Order] where [OrderNumber] IS NOT NULL ''')
+        '''Select  [OrderId],[OrderNumber] from [dbo].[Order] where [OrderNumber] IS NOT NULL AND [GiftCycleId]='%s' '''%(gfcycle))
     biggestno = mycursor.fetchall()
     for (name_r, ph, cartsts) in nameph:
         name_res= name_r
@@ -781,13 +790,12 @@ def placeorder():
             zeb = 1
     prev = str(prev+1)
     cal = 10-len(prev)
-
-    # yha gift cycle ko lena h db s abhi nhi kiya y
-    gfcycle = '1'
-    if (len(gfcycle) == 1):
-        orderid = 'O#-0'+gfcycle+'-0000'
-    if (len(gfcycle) == 2):
-        orderid = 'O#-'+gfcycle+'-0000'
+    print(gfcycle)
+    fdcf=str(gfcycle)
+    if (len(fdcf) == 1):
+        orderid = 'O#-0'+fdcf+'-0000'
+    if (len(fdcf) == 2):
+        orderid = 'O#-'+fdcf+'-0000'
     neworderid = orderid[0:cal]+prev
     try:
         mycursor.execute(
