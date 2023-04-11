@@ -114,7 +114,10 @@ def index():
                             mycursor.execute(
                                                 '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
                         resi = mycursor.fetchall()
-                        mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+                        if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+                        else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
                         ordered=mycursor.fetchall()
                         mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
                         gfcycle = mycursor.fetchall()
@@ -194,7 +197,10 @@ def goe():
                             mycursor.execute(
                                                 '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
                         resi = mycursor.fetchall()
-                        mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+                        if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+                        else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
                         ordered=mycursor.fetchall()
                         mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
                         gfcycle = mycursor.fetchall()
@@ -340,7 +346,10 @@ def change_giftcycle():
                 mycursor.execute(
                                     '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
         resi = mycursor.fetchall()
-        mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+        if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+        else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
         ordered=mycursor.fetchall()
         mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
         gfcycle = mycursor.fetchall()
@@ -429,7 +438,10 @@ def rewards():
                             '''SELECT [query_used_count] FROM [dbo].[csv_data] where [id] !=%d  order by [id]''' % (6,))
                         count_query = mycursor.fetchall()
 
-                        mycursor.execute(''' select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+                        if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+                        else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
                         ordered=mycursor.fetchall()
                     except Exception as e:      
                         session.pop('loggedin', None)
@@ -512,7 +524,10 @@ def dashboardbutton(id_data):
     mycursor.execute(
         '''SELECT [file_naam], [query_used] FROM [dbo].[csv_data] where [id] =%d order by [id]''' % (id_data,))
     lhs = mycursor.fetchall()
-    mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
     ordered=mycursor.fetchall()
 
     for (a, x,) in lhs:
@@ -1135,7 +1150,10 @@ def ship_inti():
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
 
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+            else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
             ordered=mycursor.fetchall()
             flash('Not Generating CSV Attempt once more')
             return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys, cs=csvname, held=held,usrq=usr,ordered=ordered)
@@ -1167,7 +1185,10 @@ def ship_inti():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
     ordered=mycursor.fetchall()
     return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys, cs=csvname, held=held,usrq=usr,ordered=ordered)
 
@@ -1224,7 +1245,10 @@ def dele(id_data):
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+            else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
             ordered=mycursor.fetchall()
             flash("No record has been removed because of delete query")
             return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1249,7 +1273,10 @@ def dele(id_data):
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute(''' select [dbo].[Recipient].[RecipientId], [Name] ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
     ordered=mycursor.fetchall()
     flash("Record Has Been Deleted Successfully")
     return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1276,7 +1303,10 @@ def delete(id_data):
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+            else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
             ordered=mycursor.fetchall()
             flash("No record has been removed")
             return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1300,7 +1330,10 @@ def delete(id_data):
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
     ordered=mycursor.fetchall()
     flash("Record Has Been Deleted Successfully")
     return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1327,7 +1360,10 @@ def delet(id_data):
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+            else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
             ordered=mycursor.fetchall()
             flash("No record has been removed because of delete query")
             return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1351,7 +1387,10 @@ def delet(id_data):
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
     ordered=mycursor.fetchall()
     flash("Record Has Been Deleted Successfully")
     return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1392,7 +1431,10 @@ def upstatus():
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+            else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
             ordered=mycursor.fetchall()
             flash("No record has been Updated")
             return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1416,7 +1458,10 @@ def upstatus():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
     ordered=mycursor.fetchall()
     flash("Record Has Been Updated Successfully")
     return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1438,7 +1483,10 @@ def csvupdate():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
     ordered=mycursor.fetchall()
 
     uploaded_file = request.files['file']
@@ -1583,7 +1631,10 @@ def new_csv():
                     resi = mycursor.fetchall()
                     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
                     gfcycle = mycursor.fetchall()
-                    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+                    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+                    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
                     ordered=mycursor.fetchall()
                     flash('Unexpected error occurred in databse ')
                     return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1605,7 +1656,10 @@ def new_csv():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
     ordered=mycursor.fetchall()
     flash("Csv inserted Successfully")
     return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1634,7 +1688,10 @@ def newgiftcycle():
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+            else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
             ordered=mycursor.fetchall()
             flash('Some error in insertion')
             return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1659,7 +1716,10 @@ def newgiftcycle():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
     ordered=mycursor.fetchall()
     flash('Your Gift cycle is created')
     return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
@@ -1688,7 +1748,10 @@ def new_emp():
             resi = mycursor.fetchall()
             mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
             gfcycle = mycursor.fetchall()
-            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+            if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+            else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
             ordered=mycursor.fetchall()
             if drror.args[0] == "23000":
                 flash('This User is already in database ')
@@ -1715,7 +1778,10 @@ def new_emp():
     resi = mycursor.fetchall()
     mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
     gfcycle = mycursor.fetchall()
-    mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A'  ''')
+    if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+    else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
     ordered=mycursor.fetchall()
     message = MIMEMultipart("alternatives")
     message['Subject']='Welcome User'
@@ -1806,7 +1872,10 @@ def update_giftcycle():
                 mycursor.execute(
                                     '''  SELECT [RecipientId],[Name],[Email],[GiftCycleId],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] left join [dbo].[User] on [Email]=[UserEmail] where [GiftCycleId]=?''',(lvs,))
         resi = mycursor.fetchall()
-        mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+        if(lvs==214):
+                            mycursor.execute('''  select [dbo].[Recipient].[RecipientId], [Name]  ,[Email] ,[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' ''')
+        else:
+                            mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
         ordered=mycursor.fetchall()
         mycursor.execute('''SELECT * FROM[dbo].[GiftCycle] ''')
         gfcycle = mycursor.fetchall()
