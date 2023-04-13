@@ -42,7 +42,7 @@ app.config["DEBUG"] = True
 # connection details for Google Cloud DB
 
 
-mydb = pyodbc.connect(driver='{SQL Server}', host="34.131.235.28", database="giftportal",
+mydb = pyodbc.connect(driver='{SQL Server}', host="34.100.186.240", database="giftportal",
                      TrustServerCertificate="true", user='sqlserver', password="Password@123")
 mycursor = mydb.cursor()
 mycursor.execute("SELECT [Email],[PhoneNumber] FROM [dbo].[Recipient]")
@@ -793,14 +793,11 @@ def placeorder():
     biggestno_dele = mycursor.fetchall()
     zebs = 0
     prevs = 0
-    for (no) in biggestno_dele:
+    print(biggestno_dele)
+    for (no,) in biggestno_dele:
         print(no)
-        if (zebs):
-            
-            
-            # yha s theek krna h
-            
-            
+        if (zebs):            
+            print(no[-4:])
             
             x = int((no[-4:]))
             Gift_Cycle_Id = int((no[3:5]))
