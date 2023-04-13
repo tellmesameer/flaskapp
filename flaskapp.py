@@ -1,6 +1,7 @@
 import os
 import random as rd
 import smtplib as sp
+from sys import exception
 import pyodbc
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, flash, session
@@ -17,8 +18,8 @@ db_server = os.getenv('server')
 db_user = os.getenv('username')
 db_password = os.getenv('password')
 datebase_name = os.getenv('database')
-email_id = os.getenv('email_id')
-email_id_password = os.getenv('email_id_password')
+email_id = 'atulsharma7357@gmail.com'
+email_id_password = 'uzgmxtenubxjromw'
 
 # flask app start from here
 app = Flask(__name__)
@@ -785,6 +786,38 @@ def placeorder():
     mycursor.execute(
         '''Select  [OrderId],[OrderNumber] from [dbo].[Order] where [OrderNumber] IS NOT NULL AND [GiftCycleId]='%s' '''%(gfcycle))
     biggestno = mycursor.fetchall()
+    
+    
+    mycursor.execute(
+        '''SELECT [Order_No] FROM [giftportal].[dbo].[temp_del] where [GiftCycleId]='%s' '''%(gfcycle))
+    biggestno_dele = mycursor.fetchall()
+    zebs = 0
+    prevs = 0
+    for (no) in biggestno_dele:
+        print(no)
+        if (zebs):
+            
+            
+            # yha s theek krna h
+            
+            
+            
+            x = int((no[-4:]))
+            Gift_Cycle_Id = int((no[3:5]))
+            if (Gift_Cycle_Id == 1):
+                if (prevs < x):
+                    prevs = x
+        else:
+            x = int((no[-4:]))
+            prevs = x
+            zebs = 1
+    prevs = str(prevs+1)
+    cal = 10-len(prevs)
+    
+    
+    
+    
+    
     for (name_r, ph, cartsts) in nameph:
         name_res= name_r
         phno = ph
@@ -811,7 +844,10 @@ def placeorder():
         orderid = 'O#-0'+fdcf+'-0000'
     if (len(fdcf) == 2):
         orderid = 'O#-'+fdcf+'-0000'
-    neworderid = orderid[0:cal]+prev
+    if(prev>prevs):
+        neworderid = orderid[0:cal]+prev
+    else:
+        neworderid = orderid[0:cal]+prevs
     try:
         mycursor.execute(
         '''Select [ShippingAddress],[ShippingCity],[ShippingState],[ShippingZIP],[ShippingCountry] from [dbo].[Order] where [RecipientId]='%s' ''' % (resid))
@@ -1342,14 +1378,25 @@ def delete(id_data):
 @app.route('/delet/<string:id_data>', methods=['GET','POST'])
 def delet(id_data):
     temp_admin = '5'
-    data_user = id_data
+    data_user = int(id_data)
     try:
+        mycursor.execute(''' select [OrderId],[OrderNumber],[dbo].[Recipient].[RecipientId],[Email],[PhoneNumber],[RecipientGiftStatus],[Name],[GiftCycleId] from [dbo].[Recipient] left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and  [dbo].[Recipient].[RecipientId]=%d'''%(data_user))
+        fulltab=mycursor.fetchall()
+        for (IDS,no,rid,em,phnosd,gicd,nam,gfcid,) in fulltab:
+            mycursor.execute(''' Insert into [giftportal].[dbo].[temp_del] ([Order_No],[Recipient_Id],[Email],[Phone_No],[RecipientGiftStatus],[Names],[GiftCycleId]) values('%s',%s,'%s',%s,'%s','%s',%s)'''%(no,rid,em,phnosd,gicd,nam,gfcid,))
+            if(gicd=='D'or gicd=='U'):
+                 mycursor.execute('''SELECT [reason] FROM [giftportal].[dbo].[OrderStatus] WHERE [OrderId]=%s'''%(IDS,))
+                 restab=mycursor.fetchall()
+                 for (x,) in restab:
+                      mycursor.execute('''UPDATE [giftportal].[dbo].[temp_del] SET [reason]='%s' where [Email]='%s' '''%(x,em,))
+                 mycursor.execute('''DELETE from [giftportal].[dbo].[OrderStatus] where [OrderId]=%s '''%(IDS,))
+            mydb.commit()
         add_user = '''DELETE FROM [dbo].[Order] WHERE [RecipientId]='%s' ''' % data_user
         mycursor.execute(add_user)
         add_user = '''Update  [dbo].[Recipient] set [RecipientGiftStatus]='N' WHERE [RecipientId]='%s' ''' % data_user
         mycursor.execute(add_user)
         mydb.commit()
-    except:
+    except exception as e:
         try:
             if(lvs==214):
                 mycursor.execute(
@@ -1365,7 +1412,7 @@ def delet(id_data):
             else:
                             mycursor.execute('''select [dbo].[Recipient].[RecipientId], [Name] ,[Email],[PhoneNumber] ,[RecipientGiftStatus],[OrderNumber],[OrderId] from [dbo].[Recipient]  left join [dbo].[Order] on [dbo].[Recipient].RecipientId=[dbo].[Order].[RecipientId] where [RecipientGiftStatus]!='N' and [RecipientGiftStatus]!='C' and [RecipientGiftStatus]!='A' and [GiftCycleId]=%d '''%(lvs,))
             ordered=mycursor.fetchall()
-            flash("No record has been removed because of delete query")
+            flash(f"No record has been removed because of delete query",e)
             return render_template('admin.html',lvs=lvs, mail=mail, resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
         except:
             try:
