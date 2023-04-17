@@ -18,8 +18,8 @@ db_server = os.getenv('server')
 db_user = os.getenv('username')
 db_password = os.getenv('password')
 datebase_name = os.getenv('database')
-email_id = 'atulsharma7357@gmail.com'
-email_id_password = 'uzgmxtenubxjromw'
+email_id = 'atsharma7357@gmail.com'
+email_id_password = 'rhcbztzzprbaptjh'
 
 # flask app start from here
 app = Flask(__name__)
