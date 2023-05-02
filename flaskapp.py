@@ -28,22 +28,22 @@ app.config["DEBUG"] = True
 
 
 # connection details for azure DB
-# try:
-#     mydb = pyodbc.connect(driver="ODBC Driver 18 for SQL Server",
-#                         host="34.131.235.28", database="giftportal",
-#                         uid="sqlserver", pwd="Password@123")
-# except pyodbc.Error as drror:
-#         if drror.args[0] == "42000":
-#             print('Try again later because your internet is slow and the database is timed out.')
-#         else:
-#             print('Add Your Ip first .')
+try:
+    mydb = pyodbc.connect(driver="ODBC Driver 18 for SQL Server",
+                        host="giftportal.database.windows.net", database="giftportal",
+                        uid="giftportal", pwd="Atul2001@")
+except pyodbc.Error as drror:
+        if drror.args[0] == "42000":
+            print('Try again later because your internet is slow and the database is timed out.')
+        else:
+            print('Add Your Ip first .')
 
 
 # connection details for Google Cloud DB
 
 
-mydb = pyodbc.connect(driver='{SQL Server}', host="34.100.186.240", database="giftportal",
-                     TrustServerCertificate="true", user='sqlserver', password="Password@123")
+# mydb = pyodbc.connect(driver='{SQL Server}', host="34.100.186.240", database="giftportal",
+#                      TrustServerCertificate="true", user='sqlserver', password="Password@123")
 mycursor = mydb.cursor()
 mycursor.execute("SELECT [Email],[PhoneNumber] FROM [dbo].[Recipient]")
 res_result = mycursor.fetchall()
@@ -128,7 +128,7 @@ def index():
                             session.clear()
                             flash('Unexpected error occurred in databse ')
                             return render_template('newlogin.html')
-                    return render_template('admin.html',lvs=214, mail='admin@abc.com', resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
+                    return render_template('admin.html',lvs=214, mail=session['mail'], resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
                 else:
                     
                             mycursor.execute('''SELECT  [RecipientId],[Name],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] where [Email]='%s' ''' % (mail))
@@ -151,9 +151,7 @@ def index():
     except:
             return render_template('newlogin.html')
         
-
 # verification page for user
-
 @app.route('/goe', methods=["post"])
 def goe():
     global mail
@@ -211,7 +209,7 @@ def goe():
                             session.clear()
                             flash('Unexpected error occurred in databse ')
                             return render_template('newlogin.html')
-                    return render_template('admin.html',lvs=214, mail='admin@abc.com', resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
+                    return render_template('admin.html',lvs=214, mail=session['mail'], resi=resi, gcycle=gfcycle, thambu=bus, temp=temp_admin, toos=totalorders, counts=counts, mys=mys,ordered=ordered)
                 else:
                     
                             mycursor.execute('''SELECT  [RecipientId],[Name],[PhoneNumber],[RecipientGiftStatus] FROM [dbo].[Recipient] where [Email]='%s' ''' % (mail))

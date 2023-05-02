@@ -1,9 +1,2 @@
-OrderNumber,Name,Email,DeliveryURL,ShippingDate
-O#-01-0001,atul,atsharma@datanutts.com,https://www.google.com/,2023-03-15
-O#-01-0002,atul,xyz@gmail.com,https://www.google.com/,2023-03-14
-O#-01-0033,Atul Sharma,anshulkushal51@gmail.com,,
-O#-01-0036,TESTMTT,tjoseph@datanutts.com,,
-O#-11-0001,Atul Sharma,xyzq@abc.com,,
-O#-10-0001,Atul Sharma,adubey@datanutts.com,,
-O#-01-0038,Atul Sharma,fakhan@datanutts.com,,
-O#-10-0003,Atul Sharma,wsfdfsd@adfsadf,,
+OrderNumber,Name,Email,GiftCycleId,DeliveryURL,ShippingDate
+O#-11-0001,Atul Sharma,xyzq@abc.com,11,,
